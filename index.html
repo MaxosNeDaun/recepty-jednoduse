@@ -422,27 +422,6 @@ input[type="range"]::-webkit-slider-thumb {
   border: 2px solid var(--white);
   box-shadow: var(--shadow-sm);
 }
-.checkbox-group { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 8px; 
-}
-.checkbox-group label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 400;
-  font-size: 0.9375rem;
-  cursor: pointer;
-  color: var(--gray-700);
-  padding: 4px 0;
-}
-.checkbox-group input[type="checkbox"] { 
-  width: 18px; 
-  height: 18px; 
-  accent-color: var(--black);
-  cursor: pointer;
-}
 .btn-filter {
   width: 100%;
   background: var(--black);
@@ -851,7 +830,6 @@ input[type="range"]::-webkit-slider-thumb {
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 0.875rem;
   font-size: 0.875rem;
 }
 .step-content { flex: 1; padding-top: 4px; }
@@ -1336,15 +1314,6 @@ footer {
         <option value="medium">Střední</option>
         <option value="hard">Náročné</option>
       </select>
-    </div>
-    <div class="filter-group">
-      <label>Dieta</label>
-      <div class="checkbox-group">
-        <label><input type="checkbox" value="vegetarian" onchange="applyFilters()"> Vegetariánské</label>
-        <label><input type="checkbox" value="vegan" onchange="applyFilters()"> Veganské</label>
-        <label><input type="checkbox" value="gluten-free" onchange="applyFilters()"> Bezlepkové</label>
-        <label><input type="checkbox" value="low-carb" onchange="applyFilters()"> Low carb</label>
-      </div>
     </div>
     <button class="btn-filter" onclick="resetFilters()">Resetovat filtry</button>
   </aside>
@@ -2025,7 +1994,6 @@ async function applyFilters() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const maxT = parseInt(document.getElementById('timeFilter').value);
   const diff = document.getElementById('difficultyFilter').value;
-  const checks = [...document.querySelectorAll('.checkbox-group input:checked')].map(c => c.value);
 
   let query = supabase.from('recipes').select(`*, categories(name), recipe_diets(diets(slug))`);
   if (!isAdmin) query = query.eq('is_public', true);
@@ -2039,7 +2007,6 @@ async function applyFilters() {
   const { data } = await query.order('created_at', {desc: true});
   let f = data || [];
   if (q) f = f.filter(r => r.name.toLowerCase().includes(q));
-  if (checks.length) f = f.filter(r => checks.every(c => r.recipe_diets?.some(rd => rd.diets?.slug === c)));
   currentRecipes = f; renderRecipes(f);
 }
 function updateTimeLabel(v) { document.getElementById('timeLabel').textContent = v + ' min'; }
@@ -2047,7 +2014,6 @@ function resetFilters() {
   document.getElementById('searchInput').value = '';
   document.getElementById('timeFilter').value = 120; updateTimeLabel(120);
   document.getElementById('difficultyFilter').value = 'all';
-  document.querySelectorAll('.checkbox-group input').forEach(c => c.checked = false);
   currentCategory = 'all';
   document.querySelectorAll('.cat-pill').forEach((p,i) => p.classList.toggle('active', i===0));
   loadRecipes(); showToast('Filtry resetovány');
