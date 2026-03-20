@@ -6,13 +6,9 @@
 <title>Recepty jednoduše</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
 <style>
-/* ============================================
-   MODERN MINIMALIST / MONOCHROME DESIGN SYSTEM
-   ============================================ */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Core colors */
   --black: #0a0a0a;
   --white: #ffffff;
   --gray-50: #fafafa;
@@ -22,37 +18,25 @@
   --gray-600: #737373;
   --gray-800: #262626;
   --gray-900: #171717;
-  
-  /* Semantic */
   --bg: var(--white);
   --bg-secondary: var(--gray-50);
   --text: var(--black);
   --text-secondary: var(--gray-600);
   --border: var(--gray-200);
-  --accent: var(--black); /* Primary action color */
+  --accent: var(--black);
   --accent-hover: var(--gray-800);
-  --danger: #dc2626; /* Subtle red for delete only */
-  
-  /* Spacing & radii */
+  --danger: #dc2626;
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
-  
-  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  
-  /* Transitions */
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* { 
-  margin: 0; 
-  padding: 0; 
-  box-sizing: border-box; 
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -63,1188 +47,445 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { 
-  width: 6px; 
-  height: 6px;
-}
-::-webkit-scrollbar-track { 
-  background: var(--gray-100); 
-}
-::-webkit-scrollbar-thumb { 
-  background: var(--gray-400); 
-  border-radius: 3px; 
-}
-::-webkit-scrollbar-thumb:hover { 
-  background: var(--gray-600); 
-}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--gray-100); }
+::-webkit-scrollbar-thumb { background: var(--gray-400); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gray-600); }
 
-/* ============================================
-   NAVIGATION
-   ============================================ */
+/* NAV */
 nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  position: sticky; top: 0; z-index: 100;
   background: var(--white);
   border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding: 0 24px; height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
 }
-
-.nav-logo { 
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  cursor: pointer;
-  color: var(--black);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.nav-logo {
+  font-size: 1.25rem; font-weight: 700;
+  letter-spacing: -0.025em; cursor: pointer;
+  color: var(--black); display: flex; align-items: center; gap: 8px;
 }
-.nav-logo span { 
-  color: var(--gray-600);
-  font-weight: 500;
-  font-size: 0.95rem;
-}
-
-.nav-links { 
-  display: flex; 
-  gap: 1px; 
-  align-items: center;
-  background: var(--gray-100);
-  padding: 4px;
-  border-radius: var(--radius-md);
-  height: 40px;
+.nav-logo span { color: var(--gray-600); font-weight: 500; font-size: 0.95rem; }
+.nav-links {
+  display: flex; gap: 1px; align-items: center;
+  background: var(--gray-100); padding: 4px;
+  border-radius: var(--radius-md); height: 40px;
 }
 .nav-links a {
-  text-decoration: none;
-  color: var(--gray-600);
-  font-weight: 500;
-  font-size: 0.875rem;
-  padding: 6px 16px;
-  border-radius: var(--radius-sm);
-  transition: var(--transition);
-  height: 32px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  text-decoration: none; color: var(--gray-600);
+  font-weight: 500; font-size: 0.875rem;
+  padding: 6px 16px; border-radius: var(--radius-sm);
+  transition: var(--transition); height: 32px;
+  display: flex; align-items: center; gap: 6px;
 }
-.nav-links a:hover { 
-  color: var(--black);
-  background: var(--white);
-  box-shadow: var(--shadow-sm);
-}
-.nav-links a.active { 
-  background: var(--black);
-  color: var(--white);
-  box-shadow: var(--shadow-sm);
-}
-
-.user-menu { 
-  display: flex; 
-  align-items: center; 
-  gap: 12px; 
-}
-
+.nav-links a:hover { color: var(--black); background: var(--white); box-shadow: var(--shadow-sm); }
+.nav-links a.active { background: var(--black); color: var(--white); box-shadow: var(--shadow-sm); }
+.user-menu { display: flex; align-items: center; gap: 12px; }
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: var(--transition);
-  border: 1px solid transparent;
-  text-decoration: none;
-  line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 8px 16px; border-radius: var(--radius-md);
+  font-size: 0.875rem; font-weight: 500; cursor: pointer;
+  transition: var(--transition); border: 1px solid transparent;
+  text-decoration: none; line-height: 1;
 }
-.btn-primary {
-  background: var(--black);
-  color: var(--white);
-}
-.btn-primary:hover {
-  background: var(--accent-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
-.btn-secondary {
-  background: var(--white);
-  color: var(--black);
-  border: 1px solid var(--border);
-}
-.btn-secondary:hover {
-  background: var(--gray-50);
-  border-color: var(--gray-400);
-}
-.btn-danger {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
-}
-.btn-danger:hover {
-  background: #fecaca;
-}
+.btn-primary { background: var(--black); color: var(--white); }
+.btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-secondary { background: var(--white); color: var(--black); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--gray-50); border-color: var(--gray-400); }
+.btn-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+.btn-danger:hover { background: #fecaca; }
 .btn-sm { padding: 6px 12px; font-size: 0.8125rem; }
 .btn-lg { padding: 10px 20px; font-size: 0.9375rem; height: 40px; }
-
 .user-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--gray-100);
-  color: var(--black);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 0.875rem;
-  border: 1px solid var(--border);
-  cursor: pointer;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--gray-100); color: var(--black);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 0.875rem;
+  border: 1px solid var(--border); cursor: pointer;
 }
-.user-avatar.admin-avatar { 
-  background: var(--gray-900); 
-  color: white;
-  border-color: var(--gray-900);
-}
+.user-avatar.admin-avatar { background: var(--gray-900); color: white; border-color: var(--gray-900); }
+.nav-hamburger { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--black); padding: 4px; }
 
-.nav-hamburger { 
-  display: none; 
-  background: none; 
-  border: none; 
-  font-size: 1.5rem; 
-  cursor: pointer; 
-  color: var(--black);
-  padding: 4px;
-}
-
-/* ============================================
-   HERO SECTION
-   ============================================ */
+/* HERO */
 .hero {
-  position: relative;
-  min-height: 60vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 80px 24px;
-  background: var(--gray-50);
-  border-bottom: 1px solid var(--border);
+  position: relative; min-height: 60vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 80px 24px;
+  background: var(--gray-50); border-bottom: 1px solid var(--border);
 }
-.hero-content { 
-  max-width: 700px; 
-  z-index: 2;
+.hero-content { max-width: 700px; z-index: 2; }
+.hero h1 {
+  font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 800;
+  letter-spacing: -0.03em; margin-bottom: 1rem;
+  line-height: 1.1; color: var(--black);
 }
-.hero h1 { 
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  margin-bottom: 1rem;
-  line-height: 1.1;
-  color: var(--black);
+.hero p {
+  color: var(--gray-600); font-size: 1.125rem; margin-bottom: 2.5rem;
+  max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6;
 }
-.hero p { 
-  color: var(--gray-600); 
-  font-size: 1.125rem;
-  margin-bottom: 2.5rem;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
-}
-
 .search-box {
-  display: flex;
-  max-width: 540px;
-  margin: 0 auto;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 9999px;
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  transition: var(--transition);
+  display: flex; max-width: 540px; margin: 0 auto;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 9999px; overflow: hidden;
+  box-shadow: var(--shadow-lg); transition: var(--transition);
 }
-.search-box:focus-within {
-  border-color: var(--black);
-  box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
-}
+.search-box:focus-within { border-color: var(--black); box-shadow: 0 0 0 3px rgba(0,0,0,0.1); }
 .search-box input {
-  flex: 1;
-  border: none;
-  padding: 16px 24px;
-  font-size: 1rem;
-  outline: none;
-  background: transparent;
-  color: var(--black);
-  font-family: inherit;
+  flex: 1; border: none; padding: 16px 24px; font-size: 1rem;
+  outline: none; background: transparent; color: var(--black); font-family: inherit;
 }
 .search-box input::placeholder { color: var(--gray-400); }
 .search-box button {
-  background: var(--black);
-  color: var(--white);
-  border: none;
-  padding: 16px 24px;
-  cursor: pointer;
-  font-size: 1.125rem;
-  transition: var(--transition);
+  background: var(--black); color: var(--white); border: none;
+  padding: 16px 24px; cursor: pointer; font-size: 1.125rem; transition: var(--transition);
 }
-.search-box button:hover { 
-  background: var(--accent-hover); 
-  transform: scale(1.02);
-}
+.search-box button:hover { background: var(--accent-hover); transform: scale(1.02); }
 
-/* ============================================
-   CATEGORIES
-   ============================================ */
+/* CATEGORIES */
 .categories {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  padding: 24px;
-  flex-wrap: wrap;
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: center; gap: 8px;
+  padding: 24px; flex-wrap: wrap;
+  background: var(--white); border-bottom: 1px solid var(--border);
 }
 .cat-pill {
-  background: var(--gray-50);
-  border: 1px solid var(--border);
-  padding: 8px 20px;
-  border-radius: 9999px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.875rem;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--gray-600);
+  background: var(--gray-50); border: 1px solid var(--border);
+  padding: 8px 20px; border-radius: 9999px; cursor: pointer;
+  font-weight: 500; font-size: 0.875rem; transition: var(--transition);
+  display: flex; align-items: center; gap: 8px; color: var(--gray-600);
 }
-.cat-pill:hover {
-  background: var(--white);
-  border-color: var(--black);
-  color: var(--black);
-  box-shadow: var(--shadow-sm);
-}
-.cat-pill.active {
-  background: var(--black);
-  color: var(--white);
-  border-color: var(--black);
-  box-shadow: var(--shadow-sm);
-}
+.cat-pill:hover { background: var(--white); border-color: var(--black); color: var(--black); box-shadow: var(--shadow-sm); }
+.cat-pill.active { background: var(--black); color: var(--white); border-color: var(--black); box-shadow: var(--shadow-sm); }
 
-/* ============================================
-   MAIN LAYOUT & SIDEBAR
-   ============================================ */
+/* MAIN LAYOUT */
 .main-container {
-  display: flex;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 32px 24px;
-  gap: 40px;
+  display: flex; max-width: 1400px;
+  margin: 0 auto; padding: 32px 24px; gap: 40px;
 }
 
-/* Sidebar */
+/* SIDEBAR */
 .sidebar {
-  width: 280px;
-  flex-shrink: 0;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  height: fit-content;
-  position: sticky;
-  top: 90px;
-  align-self: flex-start;
+  width: 280px; flex-shrink: 0;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px;
+  height: fit-content; position: sticky; top: 90px; align-self: flex-start;
 }
-.sidebar h3 { 
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--gray-600);
-  margin-bottom: 20px;
-  font-weight: 600;
+.sidebar h3 {
+  font-size: 0.875rem; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--gray-600);
+  margin-bottom: 20px; font-weight: 600;
 }
-
 .filter-group { margin-bottom: 24px; }
 .filter-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 10px;
-  font-size: 0.875rem;
-  color: var(--text);
+  display: block; font-weight: 600;
+  margin-bottom: 10px; font-size: 0.875rem; color: var(--text);
 }
-.filter-group select, .filter-group input[type="text"], .filter-group input[type="number"] {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  font-size: 0.9375rem;
-  outline: none;
-  transition: var(--transition);
-  background: var(--white);
-  color: var(--black);
-  font-family: inherit;
+.filter-group select {
+  width: 100%; padding: 10px 14px;
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  font-size: 0.9375rem; outline: none; transition: var(--transition);
+  background: var(--white); color: var(--black); font-family: inherit;
 }
-.filter-group select:focus, .filter-group input:focus {
-  border-color: var(--black);
-  box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+.filter-group select:focus { border-color: var(--black); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+.range-labels {
+  display: flex; justify-content: space-between;
+  font-size: 0.75rem; color: var(--gray-400); margin-top: 6px;
 }
-.range-labels { 
-  display: flex; 
-  justify-content: space-between; 
-  font-size: 0.75rem; 
-  color: var(--gray-400); 
-  margin-top: 6px;
+input[type="range"] {
+  -webkit-appearance: none; width: 100%; height: 4px;
+  border-radius: 2px; background: var(--gray-200); outline: none; margin: 8px 0;
 }
-input[type="range"] { 
-  -webkit-appearance: none; 
-  width: 100%; 
-  height: 4px; 
-  border-radius: 2px; 
-  background: var(--gray-200); 
-  outline: none; 
-  margin: 8px 0;
-}
-input[type="range"]::-webkit-slider-thumb { 
-  -webkit-appearance: none; 
-  width: 16px; 
-  height: 16px; 
-  border-radius: 50%; 
-  background: var(--black); 
-  cursor: pointer; 
-  border: 2px solid var(--white);
-  box-shadow: var(--shadow-sm);
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px;
+  border-radius: 50%; background: var(--black); cursor: pointer;
+  border: 2px solid var(--white); box-shadow: var(--shadow-sm);
 }
 .btn-filter {
-  width: 100%;
-  background: var(--black);
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 0.9375rem;
-  transition: var(--transition);
+  width: 100%; background: var(--black); color: white; border: none;
+  padding: 12px; border-radius: var(--radius-md);
+  font-weight: 600; cursor: pointer; font-size: 0.9375rem; transition: var(--transition);
 }
-.btn-filter:hover { 
-  background: var(--accent-hover);
-  transform: translateY(-1px);
-}
+.btn-filter:hover { background: var(--accent-hover); transform: translateY(-1px); }
 
-/* Recipe Grid */
+/* RECIPE GRID */
 .recipes-area { flex: 1; min-width: 0; }
-.recipes-header { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  margin-bottom: 24px; 
-  flex-wrap: wrap; 
-  gap: 12px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
+.recipes-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+  padding-bottom: 16px; border-bottom: 1px solid var(--border);
 }
-.recipes-header h2 { 
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-}
-.recipes-count { 
-  color: var(--gray-600); 
-  font-size: 0.875rem;
-  font-weight: 500;
-}
+.recipes-header h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; }
+.recipes-count { color: var(--gray-600); font-size: 0.875rem; font-weight: 500; }
 .filter-mobile-btn {
-  display: none;
-  background: var(--white);
-  border: 1px solid var(--border);
-  padding: 8px 16px;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.875rem;
+  display: none; background: var(--white);
+  border: 1px solid var(--border); padding: 8px 16px;
+  border-radius: var(--radius-md); cursor: pointer;
+  font-weight: 500; font-size: 0.875rem;
 }
-
 .recipes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 24px;
 }
 
-/* Recipe Card */
+/* RECIPE CARD */
 .recipe-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+  cursor: pointer; transition: var(--transition);
+  display: flex; flex-direction: column; height: 100%;
 }
-.recipe-card:hover { 
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--gray-300);
-}
+.recipe-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--gray-300); }
 .card-image {
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 60px;
-  position: relative;
-  overflow: hidden;
-  background: var(--gray-100);
-  border-bottom: 1px solid var(--border);
+  height: 220px; display: flex; align-items: center; justify-content: center;
+  font-size: 60px; position: relative; overflow: hidden;
+  background: var(--gray-100); border-bottom: 1px solid var(--border);
 }
-.card-image img { width: 100%; height: 100%; object-fit: cover; }
 .badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: var(--white);
-  color: var(--black);
-  padding: 4px 12px;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border: 1px solid var(--border);
+  position: absolute; top: 12px; left: 12px;
+  background: var(--white); color: var(--black);
+  padding: 4px 12px; border-radius: 9999px;
+  font-size: 0.75rem; font-weight: 600; border: 1px solid var(--border);
 }
 .badge-time {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  background: rgba(0,0,0,0.8);
-  color: white;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  position: absolute; bottom: 12px; right: 12px;
+  background: rgba(0,0,0,0.8); color: white;
+  padding: 4px 10px; border-radius: 9999px;
+  font-size: 0.75rem; font-weight: 500;
+  display: flex; align-items: center; gap: 4px;
 }
 .badge-pending {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: #fef3c7;
-  color: #92400e;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border: 1px solid #fde68a;
+  position: absolute; top: 12px; right: 12px;
+  background: #fef3c7; color: #92400e;
+  padding: 4px 10px; border-radius: 9999px;
+  font-size: 0.75rem; font-weight: 600; border: 1px solid #fde68a;
 }
 .favorite-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(255,255,255,0.95);
-  border: 1px solid rgba(0,0,0,0.1);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-  color: var(--gray-400);
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(255,255,255,0.95); border: 1px solid rgba(0,0,0,0.1);
+  width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+  font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+  transition: var(--transition); color: var(--gray-400);
 }
-.favorite-btn:hover { 
-  transform: scale(1.1);
-  background: var(--white);
-  color: var(--black);
+.favorite-btn:hover { transform: scale(1.1); background: var(--white); color: var(--black); }
+.favorite-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+.card-body { padding: 20px; display: flex; flex-direction: column; flex: 1; }
+.card-body h3 { font-size: 1.125rem; margin-bottom: 8px; font-weight: 700; line-height: 1.4; color: var(--black); }
+.card-body p { color: var(--gray-600); font-size: 0.9375rem; margin-bottom: 16px; line-height: 1.5; flex: 1; }
+.card-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 16px; border-top: 1px solid var(--border);
 }
-.favorite-btn.active { 
-  background: var(--black);
-  color: var(--white);
-  border-color: var(--black);
-}
-
-.card-body { 
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-.card-body h3 { 
-  font-size: 1.125rem;
-  margin-bottom: 8px;
-  font-weight: 700;
-  line-height: 1.4;
-  color: var(--black);
-}
-.card-body p { 
-  color: var(--gray-600); 
-  font-size: 0.9375rem;
-  margin-bottom: 16px;
-  line-height: 1.5;
-  flex: 1;
-}
-.card-meta { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-}
-.stars { 
-  color: #f59e0b; 
-  font-size: 0.875rem;
-  letter-spacing: 2px;
-}
-.difficulty { 
-  font-size: 0.75rem;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.stars { color: #f59e0b; font-size: 0.875rem; letter-spacing: 2px; }
+.difficulty {
+  font-size: 0.75rem; padding: 4px 10px; border-radius: 9999px;
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
 }
 .difficulty.easy { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
 .difficulty.medium { background: #fff7ed; color: #9a3412; border: 1px solid #ffedd5; }
 .difficulty.hard { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 
-/* Admin Actions on Card */
+/* ADMIN CARD ACTIONS */
 .admin-card-actions {
-  display: flex;
-  gap: 8px;
-  padding: 16px 20px;
-  border-top: 1px solid var(--border);
-  background: var(--gray-50);
+  display: flex; gap: 8px; padding: 16px 20px;
+  border-top: 1px solid var(--border); background: var(--gray-50);
 }
 .btn-approve, .btn-reject, .btn-delete-admin {
-  flex: 1;
-  padding: 8px;
-  border-radius: var(--radius-md);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  border: 1px solid transparent;
+  flex: 1; padding: 8px; border-radius: var(--radius-md);
+  font-size: 0.8125rem; font-weight: 600; cursor: pointer;
+  transition: var(--transition); border: 1px solid transparent;
 }
-.btn-approve {
-  background: #f0fdf4;
-  color: #166534;
-  border-color: #bbf7d0;
-}
-.btn-approve:hover {
-  background: #166534;
-  color: white;
-  border-color: #166534;
-}
-.btn-reject {
-  background: #fff7ed;
-  color: #9a3412;
-  border-color: #ffedd5;
-}
-.btn-reject:hover {
-  background: #9a3412;
-  color: white;
-  border-color: #9a3412;
-}
-.btn-delete-admin {
-  background: #fef2f2;
-  color: #991b1b;
-  border-color: #fecaca;
-}
-.btn-delete-admin:hover {
-  background: #991b1b;
-  color: white;
-  border-color: #991b1b;
-}
+.btn-approve { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.btn-approve:hover { background: #166534; color: white; border-color: #166534; }
+.btn-reject { background: #fff7ed; color: #9a3412; border-color: #ffedd5; }
+.btn-reject:hover { background: #9a3412; color: white; border-color: #9a3412; }
+.btn-delete-admin { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+.btn-delete-admin:hover { background: #991b1b; color: white; border-color: #991b1b; }
 
-/* ============================================
-   MODALS
-   ============================================ */
+/* MODALS */
 .modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(4px);
-  overflow-y: auto;
-  padding: 24px;
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  overflow-y: auto; padding: 24px;
 }
-.modal-overlay.active { 
-  display: flex; 
-  justify-content: center; 
-  align-items: flex-start;
-}
-
+.modal-overlay.active { display: flex; justify-content: center; align-items: flex-start; }
 .modal {
-  background: var(--white);
-  border-radius: var(--radius-xl);
-  max-width: 800px;
-  width: 100%;
-  margin: 40px auto;
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  animation: modalIn 0.3s ease;
-  position: relative;
-  max-height: calc(100vh - 80px);
-  overflow-y: auto;
+  background: var(--white); border-radius: var(--radius-xl);
+  max-width: 800px; width: 100%; margin: 40px auto;
+  overflow: hidden; box-shadow: var(--shadow-lg);
+  animation: modalIn 0.3s ease; position: relative;
+  max-height: calc(100vh - 80px); overflow-y: auto;
 }
-@keyframes modalIn { 
-  from { transform: translateY(20px); opacity: 0; } 
-  to { transform: translateY(0); opacity: 1; } 
-}
-
+@keyframes modalIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 .modal-hero {
-  height: 280px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 80px;
-  position: relative;
-  background: var(--gray-100);
+  height: 280px; display: flex; align-items: center; justify-content: center;
+  font-size: 80px; position: relative; background: var(--gray-100);
 }
-.modal-hero img { width: 100%; height: 100%; object-fit: cover; }
 .modal-close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: rgba(255,255,255,0.95);
-  border: 1px solid var(--border);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 1.25rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-  color: var(--black);
-  z-index: 10;
+  position: absolute; top: 16px; right: 16px;
+  background: rgba(255,255,255,0.95); border: 1px solid var(--border);
+  width: 40px; height: 40px; border-radius: 50%; font-size: 1.25rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: var(--transition); color: var(--black); z-index: 10;
 }
-.modal-close:hover { 
-  background: var(--white);
-  transform: rotate(90deg);
-  box-shadow: var(--shadow-md);
-}
-
+.modal-close:hover { background: var(--white); transform: rotate(90deg); box-shadow: var(--shadow-md); }
 .modal-body { padding: 32px; }
-.modal-body h1 { 
-  font-size: 2rem;
-  margin-bottom: 8px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-.modal-info { 
-  display: flex; 
-  gap: 12px; 
-  margin: 24px 0; 
-  flex-wrap: wrap; 
-}
+.modal-body h1 { font-size: 2rem; margin-bottom: 8px; font-weight: 800; letter-spacing: -0.02em; }
+.modal-info { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
 .info-badge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--gray-50);
-  border: 1px solid var(--border);
-  padding: 8px 16px;
-  border-radius: 9999px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: var(--gray-800);
+  display: flex; align-items: center; gap: 8px;
+  background: var(--gray-50); border: 1px solid var(--border);
+  padding: 8px 16px; border-radius: 9999px;
+  font-weight: 600; font-size: 0.875rem; color: var(--gray-800);
 }
-.info-badge .icon { font-size: 1.1rem; }
-
-.modal-rating { display: flex; gap: 4px; margin: 16px 0; }
-.modal-rating .star { 
-  font-size: 1.75rem; 
-  cursor: pointer; 
-  transition: transform 0.2s;
-  color: var(--gray-200);
+.section-title {
+  font-size: 1.125rem; margin: 32px 0 16px; color: var(--black);
+  font-weight: 700; display: flex; align-items: center; gap: 8px;
+  padding-bottom: 12px; border-bottom: 1px solid var(--border);
 }
-.modal-rating .star.active { color: #f59e0b; }
-.modal-rating .star:hover { transform: scale(1.2); }
-
-.section-title { 
-  font-size: 1.125rem; 
-  margin: 32px 0 16px; 
-  color: var(--black);
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
-}
-.ingredients-list { 
-  display: grid; 
-  grid-template-columns: 1fr 1fr; 
-  gap: 8px; 
-}
+.ingredients-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .ingredient-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  background: var(--gray-50);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  font-size: 0.9375rem;
-  transition: var(--transition);
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; background: var(--gray-50);
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  font-size: 0.9375rem; transition: var(--transition);
 }
-.ingredient-item:hover {
-  background: var(--white);
-  border-color: var(--black);
-  transform: translateX(4px);
-}
-.ingredient-item .check { 
-  color: var(--black); 
-  font-weight: 700;
-  font-size: 1rem;
-}
-
+.ingredient-item:hover { background: var(--white); border-color: var(--black); transform: translateX(4px); }
+.ingredient-item .check { color: var(--black); font-weight: 700; font-size: 1rem; }
 .steps-list { counter-reset: step; }
-.step-item { 
-  display: flex; 
-  gap: 16px; 
-  margin-bottom: 24px; 
-  align-items: flex-start; 
-}
+.step-item { display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
 .step-number {
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-  background: var(--black);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.875rem;
+  width: 32px; height: 32px; flex-shrink: 0;
+  background: var(--black); color: white; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.875rem;
 }
 .step-content { flex: 1; padding-top: 4px; }
-.step-content p { 
-  margin-bottom: 4px;
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--gray-800);
-}
-.step-emoji { 
-  font-size: 1.5rem;
-  margin-top: 8px;
-  opacity: 0.8;
-}
+.step-content p { margin-bottom: 4px; font-size: 1rem; line-height: 1.6; color: var(--gray-800); }
 
-/* Auth Modal */
-.auth-tabs { 
-  display: flex; 
-  gap: 8px; 
-  margin-bottom: 24px;
-  background: var(--gray-100);
-  padding: 4px;
-  border-radius: var(--radius-md);
+/* AUTH MODAL */
+.auth-tabs {
+  display: flex; gap: 8px; margin-bottom: 24px;
+  background: var(--gray-100); padding: 4px; border-radius: var(--radius-md);
 }
 .auth-tab {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  background: transparent;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9375rem;
-  transition: var(--transition);
-  color: var(--gray-600);
+  flex: 1; padding: 10px; border: none; background: transparent;
+  border-radius: var(--radius-sm); cursor: pointer;
+  font-weight: 600; font-size: 0.9375rem; transition: var(--transition); color: var(--gray-600);
 }
-.auth-tab.active { 
-  background: var(--white);
-  color: var(--black);
-  box-shadow: var(--shadow-sm);
-}
+.auth-tab.active { background: var(--white); color: var(--black); box-shadow: var(--shadow-sm); }
 
-/* Forms */
+/* FORMS */
 .form-group { margin-bottom: 20px; }
-.form-group label { 
-  display: block; 
-  font-weight: 600; 
-  margin-bottom: 6px; 
-  font-size: 0.875rem;
-  color: var(--text);
-}
-.form-group input, 
-.form-group textarea, 
+.form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.875rem; color: var(--text); }
+.form-group input,
+.form-group textarea,
 .form-group select {
-  width: 100%; 
-  padding: 12px 16px; 
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md); 
-  font-size: 0.9375rem; 
-  outline: none; 
-  font-family: inherit;
-  background: var(--white);
-  transition: var(--transition);
-  color: var(--black);
+  width: 100%; padding: 12px 16px; border: 1px solid var(--border);
+  border-radius: var(--radius-md); font-size: 0.9375rem; outline: none;
+  font-family: inherit; background: var(--white); transition: var(--transition); color: var(--black);
 }
-.form-group input:focus, 
-.form-group textarea:focus, 
-.form-group select:focus {
-  border-color: var(--black);
-  box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
-}
-.form-group textarea { 
-  min-height: 120px; 
-  resize: vertical; 
-  line-height: 1.5;
-}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus { border-color: var(--black); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+.form-group textarea { min-height: 120px; resize: vertical; line-height: 1.5; }
 
-/* Admin Panel Modal */
-.admin-modal-body { padding: 32px; }
+/* ADMIN PANEL */
 .admin-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px; margin-bottom: 32px;
 }
 .stat-card {
-  background: var(--gray-50);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  text-align: center;
+  background: var(--gray-50); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 20px; text-align: center;
 }
-.stat-card .stat-number { 
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--black);
-  letter-spacing: -0.02em;
-}
-.stat-card .stat-label { 
-  font-size: 0.8125rem;
-  color: var(--gray-500);
-  margin-top: 4px;
-  font-weight: 500;
-}
+.stat-card .stat-number { font-size: 2rem; font-weight: 800; color: var(--black); letter-spacing: -0.02em; }
+.stat-card .stat-label { font-size: 0.8125rem; color: var(--gray-500); margin-top: 4px; font-weight: 500; }
 .stat-card.red .stat-number { color: #dc2626; }
 .stat-card.green .stat-number { color: #16a34a; }
-
-.admin-tabs { 
-  display: flex; 
-  gap: 8px; 
-  margin-bottom: 24px; 
-  flex-wrap: wrap;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 1px;
+.admin-tabs {
+  display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--border); padding-bottom: 1px;
 }
 .admin-tab {
-  padding: 10px 0;
-  border: none;
-  background: none;
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9375rem;
-  transition: var(--transition);
-  color: var(--gray-500);
-  margin-bottom: -1px;
-  padding-bottom: 11px;
+  padding: 10px 0; border: none; background: none;
+  border-bottom: 2px solid transparent; cursor: pointer;
+  font-weight: 600; font-size: 0.9375rem; transition: var(--transition);
+  color: var(--gray-500); margin-bottom: -1px; padding-bottom: 11px;
 }
-.admin-tab.active { 
-  color: var(--black);
-  border-bottom-color: var(--black);
-}
-
-.admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9375rem;
-}
+.admin-tab.active { color: var(--black); border-bottom-color: var(--black); }
+.admin-table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
 .admin-table th {
-  background: var(--gray-50);
-  padding: 12px 16px;
-  text-align: left;
-  font-weight: 600;
-  color: var(--gray-600);
-  font-size: 0.8125rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-bottom: 1px solid var(--border);
+  background: var(--gray-50); padding: 12px 16px; text-align: left;
+  font-weight: 600; color: var(--gray-600); font-size: 0.8125rem;
+  text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border);
 }
-.admin-table td { 
-  padding: 16px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-  color: var(--gray-800);
-}
-.admin-table tr:hover td { 
-  background: var(--gray-50); 
-}
+.admin-table td { padding: 16px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--gray-800); }
+.admin-table tr:hover td { background: var(--gray-50); }
 .admin-table tr:last-child td { border-bottom: none; }
-
-.status-badge {
-  padding: 4px 12px;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  display: inline-block;
-  border: 1px solid transparent;
-}
-.status-badge.public { 
-  background: #f0fdf4; 
-  color: #166534;
-  border-color: #bbf7d0;
-}
-.status-badge.hidden { 
-  background: #fef2f2; 
-  color: #991b1b;
-  border-color: #fecaca;
-}
-.status-badge.pending { 
-  background: #fff7ed; 
-  color: #9a3412;
-  border-color: #ffedd5;
-}
-
+.status-badge { padding: 4px 12px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-block; border: 1px solid transparent; }
+.status-badge.public { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.status-badge.pending { background: #fff7ed; color: #9a3412; border-color: #ffedd5; }
 .action-btns { display: flex; gap: 6px; }
-.action-btn {
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid transparent;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-}
-.action-btn.green { 
-  background: #f0fdf4; 
-  color: #166534;
-  border-color: #bbf7d0;
-}
-.action-btn.green:hover { 
-  background: #166534; 
-  color: white;
-  border-color: #166534;
-}
-.action-btn.red { 
-  background: #fef2f2; 
-  color: #991b1b;
-  border-color: #fecaca;
-}
-.action-btn.red:hover { 
-  background: #991b1b; 
-  color: white;
-  border-color: #991b1b;
-}
-.action-btn.orange { 
-  background: #fff7ed; 
-  color: #9a3412;
-  border-color: #ffedd5;
-}
-.action-btn.orange:hover { 
-  background: #9a3412; 
-  color: white;
-  border-color: #9a3412;
-}
-
+.action-btn { padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid transparent; font-size: 0.8125rem; font-weight: 600; cursor: pointer; transition: var(--transition); }
+.action-btn.green { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.action-btn.green:hover { background: #166534; color: white; border-color: #166534; }
+.action-btn.red { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+.action-btn.red:hover { background: #991b1b; color: white; border-color: #991b1b; }
+.action-btn.orange { background: #fff7ed; color: #9a3412; border-color: #ffedd5; }
+.action-btn.orange:hover { background: #9a3412; color: white; border-color: #9a3412; }
 .table-wrap { overflow-x: auto; margin-top: 16px; }
 .admin-search {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  font-size: 0.9375rem;
-  outline: none;
-  margin-bottom: 20px;
-  background: var(--white);
-  font-family: inherit;
+  width: 100%; padding: 12px 16px; border: 1px solid var(--border);
+  border-radius: var(--radius-md); font-size: 0.9375rem; outline: none;
+  margin-bottom: 20px; background: var(--white); font-family: inherit;
 }
 .admin-search:focus { border-color: var(--black); }
+.role-badge { padding: 3px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; display: inline-block; border: 1px solid transparent; }
+.role-badge.admin { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+.role-badge.user { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.empty-state { text-align: center; padding: 60px 20px; color: var(--gray-500); }
+.empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
 
-.role-badge {
-  padding: 3px 10px;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  display: inline-block;
-  border: 1px solid transparent;
-}
-.role-badge.admin { 
-  background: #fef2f2; 
-  color: #991b1b;
-  border-color: #fecaca;
-}
-.role-badge.user { 
-  background: #f0fdf4; 
-  color: #166534;
-  border-color: #bbf7d0;
-}
+/* FOOTER */
+footer { background: var(--black); color: var(--gray-400); padding: 60px 24px 40px; margin-top: 80px; }
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
+.footer-col h4 { color: var(--white); margin-bottom: 20px; font-size: 1rem; font-weight: 700; letter-spacing: -0.025em; }
+.footer-col p, .footer-col a { font-size: 0.9375rem; line-height: 1.8; color: var(--gray-400); text-decoration: none; transition: color 0.2s; }
+.footer-col a:hover { color: var(--white); text-decoration: underline; text-underline-offset: 4px; }
+.footer-bottom { text-align: center; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--gray-800); font-size: 0.875rem; color: var(--gray-600); }
 
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--gray-500);
-}
-.empty-state .empty-icon { 
-  font-size: 48px; 
-  margin-bottom: 16px;
-  opacity: 0.5;
-}
-
-/* ============================================
-   FOOTER
-   ============================================ */
-footer {
-  background: var(--black);
-  color: var(--gray-400);
-  padding: 60px 24px 40px;
-  margin-top: 80px;
-}
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.footer-col h4 { 
-  color: var(--white); 
-  margin-bottom: 20px; 
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-}
-.footer-col p, .footer-col a { 
-  font-size: 0.9375rem; 
-  line-height: 1.8; 
-  color: var(--gray-400);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.footer-col a:hover { 
-  color: var(--white);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-.social-links { 
-  display: flex; 
-  gap: 16px; 
-  margin-top: 16px;
-}
-.social-links a {
-  font-size: 1.25rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--gray-800);
-  color: var(--white);
-  transition: var(--transition);
-}
-.social-links a:hover {
-  background: var(--white);
-  color: var(--black);
-  transform: translateY(-2px);
-}
-
-.footer-bottom {
-  text-align: center;
-  margin-top: 60px;
-  padding-top: 24px;
-  border-top: 1px solid var(--gray-800);
-  font-size: 0.875rem;
-  color: var(--gray-600);
-}
-
-/* ============================================
-   TOAST
-   ============================================ */
+/* TOAST */
 .toast {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
+  position: fixed; bottom: 30px; left: 50%;
   transform: translateX(-50%) translateY(100px);
-  background: var(--black);
-  color: white;
-  padding: 14px 28px;
-  border-radius: var(--radius-md);
-  font-weight: 500;
-  z-index: 300;
+  background: var(--black); color: white; padding: 14px 28px;
+  border-radius: var(--radius-md); font-weight: 500; z-index: 300;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--gray-800);
-  font-size: 0.9375rem;
+  box-shadow: var(--shadow-lg); border: 1px solid var(--gray-800); font-size: 0.9375rem;
 }
-.toast.error { 
-  background: #dc2626;
-  border-color: #b91c1c;
-}
-.toast.show { 
-  transform: translateX(-50%) translateY(0); 
-}
+.toast.error { background: #dc2626; border-color: #b91c1c; }
+.toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+/* RESPONSIVE */
 @media (max-width: 1024px) {
-  .sidebar { 
-    display: none; 
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 150;
-    height: 100vh;
-    width: 300px;
-    border-radius: 0;
-    padding-top: 80px;
-    overflow-y: auto;
-  }
+  .sidebar { display: none; position: fixed; top: 0; left: 0; z-index: 150; height: 100vh; width: 300px; border-radius: 0; padding-top: 80px; overflow-y: auto; }
   .sidebar.mobile-open { display: block; }
   .filter-mobile-btn { display: inline-flex; }
 }
-
 @media (max-width: 768px) {
-  .nav-links { 
-    display: none; 
-    position: absolute;
-    top: 64px;
-    left: 0;
-    right: 0;
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
-    flex-direction: column;
-    gap: 4px;
-    box-shadow: var(--shadow-lg);
-  }
+  .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--white); border-bottom: 1px solid var(--border); padding: 12px 24px; flex-direction: column; gap: 4px; box-shadow: var(--shadow-lg); }
   .nav-links.open { display: flex; }
   .nav-hamburger { display: block; }
-  
   .hero { min-height: 50vh; }
   .hero h1 { font-size: 2rem; }
-  
   .modal-hero { height: 200px; font-size: 60px; }
   .modal-body { padding: 24px; }
   .modal-body h1 { font-size: 1.5rem; }
-  
   .ingredients-list { grid-template-columns: 1fr; }
   .info-badge { font-size: 0.8125rem; padding: 6px 12px; }
   .recipes-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
-  
   .admin-stats { grid-template-columns: repeat(2, 1fr); }
-  .admin-modal-body { padding: 20px; }
 }
-
 @media (max-width: 480px) {
   .recipes-grid { grid-template-columns: 1fr; }
   .main-container { padding: 24px 16px; }
@@ -1350,12 +591,10 @@ footer {
       <button class="modal-close" onclick="closeAuthModal()" style="position:absolute;top:16px;right:16px">✕</button>
       <h1 style="font-size: 1.75rem; margin-bottom: 8px;">Přihlášení</h1>
       <p style="color: var(--gray-500); margin-bottom: 32px;">Přihlaste se pro ukládání receptů a hodnocení.</p>
-      
       <div class="auth-tabs">
         <button class="auth-tab active" onclick="switchAuthTab('login')" id="tab-login">Přihlásit se</button>
         <button class="auth-tab" onclick="switchAuthTab('register')" id="tab-register">Registrovat</button>
       </div>
-      
       <div id="loginForm">
         <div class="form-group">
           <label>Email</label>
@@ -1367,7 +606,6 @@ footer {
         </div>
         <button class="btn btn-primary btn-lg" onclick="handleLogin()" style="width: 100%; margin-top: 8px;">Přihlásit se</button>
       </div>
-      
       <div id="registerForm" style="display:none;">
         <div class="form-group">
           <label>Email</label>
@@ -1389,12 +627,10 @@ footer {
     <div class="modal-body" style="padding: 32px;">
       <button class="modal-close" onclick="closeAddModal()" style="position:absolute;top:16px;right:16px">✕</button>
       <h1 style="font-size: 1.5rem; margin-bottom: 24px;">Přidat nový recept</h1>
-      
       <div class="form-group">
         <label>Název receptu *</label>
         <input type="text" id="newName" placeholder="Např. Čokoládový dort">
       </div>
-      
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
         <div class="form-group">
           <label>Kategorie *</label>
@@ -1411,17 +647,14 @@ footer {
           <input type="number" id="newTime" placeholder="30" value="30">
         </div>
       </div>
-
       <div class="form-group">
         <label>Krátký popis</label>
         <input type="text" id="newDesc" placeholder="Lahodný a jednoduchý recept...">
       </div>
-
       <div class="form-group">
         <label>URL obrázku</label>
         <input type="url" id="newImage" placeholder="https://... (nepovinné)">
       </div>
-
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
         <div class="form-group">
           <label>Počet porcí</label>
@@ -1436,17 +669,14 @@ footer {
           </select>
         </div>
       </div>
-
       <div class="form-group">
         <label>Ingredience (každá na nový řádek) *</label>
         <textarea id="newIngredients" placeholder="200g mouky&#10;3 vejce&#10;100ml mléka"></textarea>
       </div>
-
       <div class="form-group">
         <label>Postup (každý krok na nový řádek) *</label>
         <textarea id="newSteps" placeholder="Smíchejte suché ingredience.&#10;Přidejte vejce a mléko.&#10;Pečte 30 minut."></textarea>
       </div>
-
       <button class="btn btn-primary btn-lg" onclick="addRecipe()" style="width: 100%; margin-top: 8px;">Přidat recept</button>
     </div>
   </div>
@@ -1463,38 +693,20 @@ footer {
         </div>
         <button class="modal-close" onclick="closeAdminModal()">✕</button>
       </div>
-
-      <!-- STATISTIKY -->
       <div style="padding: 32px 32px 0;">
         <div class="admin-stats" id="adminStats">
-          <div class="stat-card">
-            <div class="stat-number" id="statTotal">—</div>
-            <div class="stat-label">Celkem receptů</div>
-          </div>
-          <div class="stat-card red">
-            <div class="stat-number" id="statPending">—</div>
-            <div class="stat-label">Čeká na schválení</div>
-          </div>
-          <div class="stat-card green">
-            <div class="stat-number" id="statPublic">—</div>
-            <div class="stat-label">Veřejných</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" id="statUsers">—</div>
-            <div class="stat-label">Uživatelů</div>
-          </div>
+          <div class="stat-card"><div class="stat-number" id="statTotal">—</div><div class="stat-label">Celkem receptů</div></div>
+          <div class="stat-card red"><div class="stat-number" id="statPending">—</div><div class="stat-label">Čeká na schválení</div></div>
+          <div class="stat-card green"><div class="stat-number" id="statPublic">—</div><div class="stat-label">Veřejných</div></div>
+          <div class="stat-card"><div class="stat-number" id="statUsers">—</div><div class="stat-label">Uživatelů</div></div>
         </div>
       </div>
-
-      <!-- ZÁLOŽKY -->
       <div style="padding: 0 32px 24px;">
         <div class="admin-tabs">
           <button class="admin-tab active" onclick="switchAdminTab('pending')" id="atab-pending">Ke schválení</button>
           <button class="admin-tab" onclick="switchAdminTab('all')" id="atab-all">Všechny recepty</button>
           <button class="admin-tab" onclick="switchAdminTab('users')" id="atab-users">Uživatelé</button>
         </div>
-
-        <!-- OBSAH ZÁLOŽEK -->
         <div id="adminContent" style="min-height: 300px;">
           <div class="loading"><div class="spinner"></div><p>Načítání...</p></div>
         </div>
@@ -1541,16 +753,10 @@ footer {
 </footer>
 
 <script>
-// ============================================
-// SUPABASE KONFIGURACE (PONECHÁNO PŮVODNÍ)
-// ============================================
 const SUPABASE_URL = 'https://bvyjornhpipyhaptqkbc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2eWpvcm5ocGlweWhhcHRxa2JjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMDE0NzcsImV4cCI6MjA4OTU3NzQ3N30.IRckFTu3SoQHflZiPUv2EhKW_aJP9msgurW2PEzl1FM';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ============================================
-// GLOBÁLNÍ PROMĚNNÉ
-// ============================================
 let currentUser = null;
 let currentCategory = 'all';
 let currentRecipes = [];
@@ -1559,9 +765,6 @@ let userFavorites = [];
 let isAdmin = false;
 let currentAdminTab = 'pending';
 
-// ============================================
-// INICIALIZACE
-// ============================================
 async function init() {
   const { data: { user } } = await supabase.auth.getUser();
   currentUser = user;
@@ -1575,22 +778,20 @@ async function init() {
 
 async function checkAdminRole() {
   if (!currentUser) { isAdmin = false; return; }
-  const { data, error } = await supabase
-    .from('profiles').select('role').eq('id', currentUser.id).single();
-  if (error) { console.error('Chyba při kontrole role:', error); isAdmin = false; return; }
+  const { data, error } = await supabase.from('profiles').select('role').eq('id', currentUser.id).single();
+  if (error) { isAdmin = false; return; }
   isAdmin = data?.role === 'admin';
 }
 
 async function loadCategories() {
   const { data, error } = await supabase.from('categories').select('*').order('id');
-  if (error) { console.error('Chyba:', error); return; }
+  if (error) return;
   categories = data || [];
 }
 
 async function loadRecipes() {
   const grid = document.getElementById('recipesGrid');
   grid.innerHTML = `<div class="loading" style="grid-column: 1/-1;"><div class="spinner"></div><p style="margin-top:16px;color:var(--gray-500)">Načítání...</p></div>`;
-  
   let query = supabase.from('recipes').select(`*, categories(name, emoji), recipe_diets(diets(slug, name, emoji))`);
   if (!isAdmin) query = query.eq('is_public', true);
   if (currentCategory !== 'all') {
@@ -1598,19 +799,14 @@ async function loadRecipes() {
     if (catId) query = query.eq('category_id', catId);
   }
   const { data, error } = await query.order('created_at', { ascending: false });
-  if (error) {
-    console.error('Chyba:', error);
-    showToast('Chyba při načítání receptů', true);
-    return;
-  }
+  if (error) { showToast('Chyba při načítání receptů', true); return; }
   currentRecipes = data || [];
   renderRecipes(currentRecipes);
 }
 
 async function loadFavorites() {
   if (!currentUser) return;
-  const { data, error } = await supabase.from('favorites').select('recipe_id').eq('user_id', currentUser.id);
-  if (error) return;
+  const { data } = await supabase.from('favorites').select('recipe_id').eq('user_id', currentUser.id);
   userFavorites = data?.map(f => f.recipe_id) || [];
 }
 
@@ -1618,29 +814,18 @@ function subscribeToChanges() {
   supabase.channel('recipes').on('postgres_changes', { event: '*', schema: 'public', table: 'recipes' }, () => loadRecipes()).subscribe();
 }
 
-// ============================================
-// RENDER RECEPTŮ
-// ============================================
 function renderRecipes(list) {
   const grid = document.getElementById('recipesGrid');
   const count = document.getElementById('recipesCount');
   count.textContent = `${list.length} receptů`;
-
   if (list.length === 0) {
-    grid.innerHTML = `
-      <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--gray-500)">
-        <div style="font-size:48px;margin-bottom:16px;opacity:0.5">🔍</div>
-        <h3>Žádné recepty nenalezeny</h3>
-        <p>Zkuste změnit filtry.</p>
-      </div>`;
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--gray-500)"><div style="font-size:48px;margin-bottom:16px;opacity:0.5">🔍</div><h3>Žádné recepty nenalezeny</h3><p>Zkuste změnit filtry.</p></div>`;
     return;
   }
-
   grid.innerHTML = list.map(r => {
     const isFav = userFavorites.includes(r.id);
     const isPending = !r.is_public;
     const isHealthy = r.recipe_diets?.some(rd => rd.diets?.slug === 'vegetarian' || rd.diets?.slug === 'vegan');
-    
     return `
     <div class="recipe-card" onclick="openDetail(${r.id})">
       <div class="card-image" style="background-image: url('${r.image_url || 'https://placehold.co/600x400/f5f5f5/cccccc?text=Recept'}'); background-size: cover; background-position: center;">
@@ -1669,9 +854,6 @@ function renderRecipes(list) {
   }).join('');
 }
 
-// ============================================
-// UI & AUTH
-// ============================================
 function updateUserUI() {
   const menu = document.getElementById('userMenu');
   if (currentUser) {
@@ -1724,17 +906,10 @@ async function handleRegister() {
 
 async function handleLogout() {
   await supabase.auth.signOut();
-  currentUser = null;
-  userFavorites = [];
-  isAdmin = false;
-  updateUserUI();
-  loadRecipes();
-  showToast('Odhlášeno');
+  currentUser = null; userFavorites = []; isAdmin = false;
+  updateUserUI(); loadRecipes(); showToast('Odhlášeno');
 }
 
-// ============================================
-// FAVORITES & DETAIL
-// ============================================
 async function toggleFavorite(recipeId) {
   if (!currentUser) { showToast('Pro oblíbené se přihlaste', true); openAuthModal(); return; }
   const isFav = userFavorites.includes(recipeId);
@@ -1756,38 +931,33 @@ async function openDetail(id) {
     .select(`*, categories(name), recipe_diets(diets(slug, name)), ingredients(*), steps(*)`)
     .eq('id', id).single();
   if (error) { showToast('Recept nenalezen', true); return; }
-
   const modal = document.getElementById('detailModal');
   const hero = document.getElementById('modalHero');
   const body = document.getElementById('modalBody');
-  
   hero.style.backgroundImage = `url('${r.image_url || 'https://placehold.co/800x400/f5f5f5/cccccc?text=Recept'}')`;
+  hero.style.backgroundSize = 'cover';
+  hero.style.backgroundPosition = 'center';
   hero.innerHTML = `<button class="modal-close" onclick="closeModal()">✕</button>`;
-
   const diets = r.recipe_diets?.map(rd => rd.diets?.name).filter(Boolean) || [];
-  const ingredients = r.ingredients?.sort((a,b) => a.order_index - b.order_index) || [];
-  const steps = r.steps?.sort((a,b) => a.order_index - b.order_index) || [];
-
+  const ingredients = r.ingredients?.sort((a, b) => a.order_index - b.order_index) || [];
+  const steps = r.steps?.sort((a, b) => a.order_index - b.order_index) || [];
   body.innerHTML = `
     <h1>${r.name}</h1>
     <p style="color:var(--gray-600);font-size:1.125rem;margin-top:8px">${r.description || ''}</p>
-    
     <div class="modal-info">
       <span class="info-badge">⏱️ ${r.time_minutes} min</span>
       <span class="info-badge">👤 ${r.servings} porce</span>
       <span class="info-badge">📊 ${r.difficulty === 'easy' ? 'Snadné' : r.difficulty === 'medium' ? 'Střední' : 'Náročné'}</span>
       ${diets.map(d => `<span class="info-badge">🥗 ${d}</span>`).join('')}
     </div>
-
     ${isAdmin ? `
       <div style="display:flex;gap:10px;margin:24px 0;flex-wrap:wrap">
         ${!r.is_public
           ? `<button class="btn btn-primary btn-sm" onclick="adminApproveRecipe(${r.id});closeModal()">Schválit</button>`
           : `<button class="btn btn-secondary btn-sm" onclick="adminHideRecipe(${r.id});closeModal()">Skrýt</button>`
         }
-        <button class="btn btn-danger btn-sm" onclick="adminDeleteRecipe(${r.id},'${r.name.replace(/'/g,"\\'")}');closeModal()">Smazat</button>
+        <button class="btn btn-danger btn-sm" onclick="adminDeleteRecipe(${r.id},'${r.name.replace(/'/g, "\\'")}');closeModal()">Smazat</button>
       </div>` : ''}
-
     <h3 class="section-title">Ingredience</h3>
     <div class="ingredients-list">
       ${ingredients.map(ing => `
@@ -1796,18 +966,14 @@ async function openDetail(id) {
           ${ing.amount ? `<strong>${ing.amount}</strong> ` : ''}${ing.name}
         </div>`).join('') || '<p style="color:var(--gray-400)">Žádné ingredience</p>'}
     </div>
-
     <h3 class="section-title">Postup</h3>
     <div class="steps-list">
-      ${steps.map((s,i) => `
+      ${steps.map((s, i) => `
         <div class="step-item">
-          <div class="step-number">${i+1}</div>
-          <div class="step-content">
-            <p>${s.description}</p>
-          </div>
+          <div class="step-number">${i + 1}</div>
+          <div class="step-content"><p>${s.description}</p></div>
         </div>`).join('') || '<p style="color:var(--gray-400)">Žádný postup</p>'}
-    </div>
-  `;
+    </div>`;
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -1817,9 +983,6 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-// ============================================
-// ADD RECIPE
-// ============================================
 function openAddModal() {
   if (!currentUser) { showToast('Pro přidání se přihlaste', true); openAuthModal(); return; }
   document.getElementById('addModal').classList.add('active');
@@ -1840,39 +1003,29 @@ async function addRecipe() {
   const diff = document.getElementById('newDiff').value;
   const ings = document.getElementById('newIngredients').value;
   const stepsTxt = document.getElementById('newSteps').value;
-
   if (!name || !ings || !stepsTxt) { showToast('Vyplňte povinná pole', true); return; }
-
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').substring(0,200);
-  
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').substring(0, 200);
   const { data: recipe, error: rErr } = await supabase.from('recipes').insert({
     name, slug, description: desc, category_id: parseInt(cat),
     image_url: img || null, time_minutes: time, servings: serv, difficulty: diff,
     author_id: currentUser.id, is_public: isAdmin
   }).select().single();
-
   if (rErr) { showToast('Chyba: ' + rErr.message, true); return; }
-
   const ingredients = ings.split('\n').filter(l => l.trim()).map((l, i) => {
     const m = l.match(/^([\d\s\/.,]+)\s+(.+)$/);
     return { recipe_id: recipe.id, amount: m ? m[1].trim() : null, name: m ? m[2].trim() : l.trim(), order_index: i };
   });
   await supabase.from('ingredients').insert(ingredients);
-
   const steps = stepsTxt.split('\n').filter(l => l.trim()).map((l, i) => ({
     recipe_id: recipe.id, description: l.trim(), order_index: i
   }));
   await supabase.from('steps').insert(steps);
-
-  ['newName','newDesc','newImage','newIngredients','newSteps'].forEach(id => document.getElementById(id).value = '');
+  ['newName', 'newDesc', 'newImage', 'newIngredients', 'newSteps'].forEach(id => document.getElementById(id).value = '');
   closeAddModal();
   showToast(isAdmin ? 'Recept publikován!' : 'Recept odeslán ke schválení');
   loadRecipes();
 }
 
-// ============================================
-// ADMIN PANEL
-// ============================================
 async function openAdminModal() {
   if (!isAdmin) { showToast('Přístup zamítnut', true); return; }
   document.getElementById('adminModal').classList.add('active');
@@ -1894,11 +1047,11 @@ async function switchAdminTab(tab) {
 }
 
 async function loadAdminStats() {
-  const [{count: total}, {count: pending}, {count: publicCount}, {count: users}] = await Promise.all([
-    supabase.from('recipes').select('*', {count: 'exact', head: true}),
-    supabase.from('recipes').select('*', {count: 'exact', head: true}).eq('is_public', false),
-    supabase.from('recipes').select('*', {count: 'exact', head: true}).eq('is_public', true),
-    supabase.from('profiles').select('*', {count: 'exact', head: true})
+  const [{ count: total }, { count: pending }, { count: publicCount }, { count: users }] = await Promise.all([
+    supabase.from('recipes').select('*', { count: 'exact', head: true }),
+    supabase.from('recipes').select('*', { count: 'exact', head: true }).eq('is_public', false),
+    supabase.from('recipes').select('*', { count: 'exact', head: true }).eq('is_public', true),
+    supabase.from('profiles').select('*', { count: 'exact', head: true })
   ]);
   document.getElementById('statTotal').textContent = total || 0;
   document.getElementById('statPending').textContent = pending || 0;
@@ -1915,81 +1068,106 @@ async function loadAdminContent(tab) {
 }
 
 async function renderAdminPending(container) {
-  const { data } = await supabase.from('recipes').select('*, categories(name)').eq('is_public', false).order('created_at', {desc: true});
+  const { data } = await supabase.from('recipes').select('*, categories(name)').eq('is_public', false).order('created_at', { ascending: false });
   if (!data?.length) {
     container.innerHTML = `<div class="empty-state"><div class="empty-icon">✓</div><h3>Vše schváleno</h3><p>Žádné recepty nečekají.</p></div>`;
     return;
   }
-  container.innerHTML = `<table class="admin-table"><thead><tr><th>Recept</th><th>Kategorie</th><th>Čas</th><th>Akce</th></tr></thead><tbody>${
-    data.map(r => `<tr><td><strong>${r.name}</strong></td><td>${r.categories?.name || '—'}</td><td>${r.time_minutes} min</td><td>
-      <button class="action-btn green" onclick="adminApproveRecipe(${r.id})">Schválit</button>
-      <button class="action-btn red" onclick="adminDeleteRecipe(${r.id}, '${r.name.replace(/'/g,"\\'")}')">Smazat</button>
-    </td></tr>`).join('')
-  }</tbody></table>`;
+  container.innerHTML = `<div class="table-wrap"><table class="admin-table"><thead><tr><th>Recept</th><th>Kategorie</th><th>Čas</th><th>Akce</th></tr></thead><tbody>${
+    data.map(r => `<tr>
+      <td><strong>${r.name}</strong></td>
+      <td>${r.categories?.name || '—'}</td>
+      <td>${r.time_minutes} min</td>
+      <td><div class="action-btns">
+        <button class="action-btn green" onclick="adminApproveRecipe(${r.id})">Schválit</button>
+        <button class="action-btn red" onclick="adminDeleteRecipe(${r.id}, '${r.name.replace(/'/g, "\\'")}')">Smazat</button>
+      </div></td>
+    </tr>`).join('')
+  }</tbody></table></div>`;
 }
 
 async function renderAdminAll(container) {
-  const { data } = await supabase.from('recipes').select('*, categories(name)').order('created_at', {desc: true});
-  container.innerHTML = `<input class="admin-search" placeholder="Hledat..." oninput="filterAdminTable(this.value)"><div class="table-wrap"><table class="admin-table" id="adminRecipeTable"><thead><tr><th>Název</th><th>Stav</th><th>Akce</th></tr></thead><tbody>${
-    data.map(r => `<tr data-name="${r.name.toLowerCase()}"><td><strong>${r.name}</strong></td><td><span class="status-badge ${r.is_public ? 'public' : 'pending'}">${r.is_public ? 'Veřejný' : 'Čeká'}</span></td><td>
-      ${r.is_public ? `<button class="action-btn orange" onclick="adminHideRecipe(${r.id})">Skrýt</button>` : `<button class="action-btn green" onclick="adminApproveRecipe(${r.id})">Schválit</button>`}
-      <button class="action-btn red" onclick="adminDeleteRecipe(${r.id}, '${r.name.replace(/'/g,"\\'")}')">Smazat</button>
-    </td></tr>`).join('')
-  }</tbody></table></div>`;
+  const { data } = await supabase.from('recipes').select('*, categories(name)').order('created_at', { ascending: false });
+  container.innerHTML = `
+    <input class="admin-search" placeholder="Hledat..." oninput="filterAdminTable(this.value)">
+    <div class="table-wrap"><table class="admin-table" id="adminRecipeTable">
+      <thead><tr><th>Název</th><th>Stav</th><th>Akce</th></tr></thead>
+      <tbody>${(data || []).map(r => `<tr data-name="${r.name.toLowerCase()}">
+        <td><strong>${r.name}</strong></td>
+        <td><span class="status-badge ${r.is_public ? 'public' : 'pending'}">${r.is_public ? 'Veřejný' : 'Čeká'}</span></td>
+        <td><div class="action-btns">
+          ${r.is_public
+            ? `<button class="action-btn orange" onclick="adminHideRecipe(${r.id})">Skrýt</button>`
+            : `<button class="action-btn green" onclick="adminApproveRecipe(${r.id})">Schválit</button>`
+          }
+          <button class="action-btn red" onclick="adminDeleteRecipe(${r.id}, '${r.name.replace(/'/g, "\\'")}')">Smazat</button>
+        </div></td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
 }
 
 function filterAdminTable(q) {
-  document.querySelectorAll('#adminRecipeTable tbody tr').forEach(r => r.style.display = r.getAttribute('data-name')?.includes(q.toLowerCase()) ? '' : 'none');
+  document.querySelectorAll('#adminRecipeTable tbody tr').forEach(r =>
+    r.style.display = r.getAttribute('data-name')?.includes(q.toLowerCase()) ? '' : 'none');
 }
 
 async function renderAdminUsers(container) {
-  const { data } = await supabase.from('profiles').select('*').order('created_at', {desc: true});
+  const { data } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
   if (!data?.length) { container.innerHTML = '<div class="empty-state"><h3>Žádní uživatelé</h3></div>'; return; }
-  container.innerHTML = `<input class="admin-search" placeholder="Hledat..." oninput="filterAdminUsers(this.value)"><div class="table-wrap"><table class="admin-table" id="adminUsersTable"><thead><tr><th>Email</th><th>Role</th><th>Akce</th></tr></thead><tbody>${
-    data.map(u => `<tr data-email="${(u.email||'').toLowerCase()}"><td>${u.email || u.id}</td><td><span class="role-badge ${u.role==='admin'?'admin':'user'}">${u.role==='admin'?'Admin':'Uživatel'}</span></td><td>
-      ${u.id !== currentUser?.id ? `<button class="action-btn ${u.role==='admin'?'orange':'green'}" onclick="adminSetRole('${u.id}', '${u.role==='admin'?'user':'admin'}')">${u.role==='admin'?'Odebrat admin':'Udělat admin'}</button>` : '<span style="color:var(--gray-400)">—</span>'}
-    </td></tr>`).join('')
-  }</tbody></table></div>`;
+  container.innerHTML = `
+    <input class="admin-search" placeholder="Hledat..." oninput="filterAdminUsers(this.value)">
+    <div class="table-wrap"><table class="admin-table" id="adminUsersTable">
+      <thead><tr><th>Email</th><th>Role</th><th>Akce</th></tr></thead>
+      <tbody>${data.map(u => `<tr data-email="${(u.email || '').toLowerCase()}">
+        <td>${u.email || u.id}</td>
+        <td><span class="role-badge ${u.role === 'admin' ? 'admin' : 'user'}">${u.role === 'admin' ? 'Admin' : 'Uživatel'}</span></td>
+        <td>${u.id !== currentUser?.id
+          ? `<button class="action-btn ${u.role === 'admin' ? 'orange' : 'green'}" onclick="adminSetRole('${u.id}', '${u.role === 'admin' ? 'user' : 'admin'}')">${u.role === 'admin' ? 'Odebrat admin' : 'Udělat admin'}</button>`
+          : '<span style="color:var(--gray-400)">—</span>'
+        }</td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
 }
 
 function filterAdminUsers(q) {
-  document.querySelectorAll('#adminUsersTable tbody tr').forEach(r => r.style.display = r.getAttribute('data-email')?.includes(q.toLowerCase()) ? '' : 'none');
+  document.querySelectorAll('#adminUsersTable tbody tr').forEach(r =>
+    r.style.display = r.getAttribute('data-email')?.includes(q.toLowerCase()) ? '' : 'none');
 }
 
 async function adminApproveRecipe(id) {
-  await supabase.from('recipes').update({is_public:true}).eq('id',id);
+  await supabase.from('recipes').update({ is_public: true }).eq('id', id);
   showToast('Recept schválen');
   await loadAdminStats(); await loadAdminContent(currentAdminTab); loadRecipes();
 }
 async function adminHideRecipe(id) {
-  await supabase.from('recipes').update({is_public:false}).eq('id',id);
+  await supabase.from('recipes').update({ is_public: false }).eq('id', id);
   showToast('Recept skryt');
   await loadAdminStats(); await loadAdminContent(currentAdminTab); loadRecipes();
 }
 async function adminDeleteRecipe(id, name) {
   if (!confirm(`Smazat "${name}"?`)) return;
-  await supabase.from('favorites').delete().eq('recipe_id',id);
-  await supabase.from('ingredients').delete().eq('recipe_id',id);
-  await supabase.from('steps').delete().eq('recipe_id',id);
-  await supabase.from('recipes').delete().eq('id',id);
+  await supabase.from('favorites').delete().eq('recipe_id', id);
+  await supabase.from('ingredients').delete().eq('recipe_id', id);
+  await supabase.from('steps').delete().eq('recipe_id', id);
+  await supabase.from('recipes').delete().eq('id', id);
   showToast('Recept smazán');
   await loadAdminStats(); await loadAdminContent(currentAdminTab); loadRecipes();
 }
 async function adminSetRole(uid, role) {
-  await supabase.from('profiles').update({role}).eq('id',uid);
+  await supabase.from('profiles').update({ role }).eq('id', uid);
   showToast(role === 'admin' ? 'Uděleno admin právo' : 'Admin právo odebráno');
   await loadAdminContent('users');
 }
 
-// ============================================
-// FILTERS & UTILS
-// ============================================
 function filterCategory(cat) {
   currentCategory = cat;
-  document.querySelectorAll('.cat-pill, .nav-links a').forEach(el => el.classList.toggle('active', el.getAttribute('onclick')?.includes(`'${cat}'`)));
+  document.querySelectorAll('.cat-pill, .nav-links a').forEach(el =>
+    el.classList.toggle('active', el.getAttribute('onclick')?.includes(`'${cat}'`)));
   loadRecipes();
 }
+
 function searchRecipes() { applyFilters(); }
+
 async function applyFilters() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const maxT = parseInt(document.getElementById('timeFilter').value);
@@ -2004,32 +1182,41 @@ async function applyFilters() {
   if (diff !== 'all') query = query.eq('difficulty', diff);
   query = query.lte('time_minutes', maxT);
 
-  const { data } = await query.order('created_at', {desc: true});
+  const { data } = await query.order('created_at', { ascending: false });
   let f = data || [];
   if (q) f = f.filter(r => r.name.toLowerCase().includes(q));
-  currentRecipes = f; renderRecipes(f);
+  currentRecipes = f;
+  renderRecipes(f);
 }
+
 function updateTimeLabel(v) { document.getElementById('timeLabel').textContent = v + ' min'; }
+
 function resetFilters() {
   document.getElementById('searchInput').value = '';
-  document.getElementById('timeFilter').value = 120; updateTimeLabel(120);
+  document.getElementById('timeFilter').value = 120;
+  updateTimeLabel(120);
   document.getElementById('difficultyFilter').value = 'all';
   currentCategory = 'all';
-  document.querySelectorAll('.cat-pill').forEach((p,i) => p.classList.toggle('active', i===0));
-  loadRecipes(); showToast('Filtry resetovány');
+  document.querySelectorAll('.cat-pill').forEach((p, i) => p.classList.toggle('active', i === 0));
+  loadRecipes();
+  showToast('Filtry resetovány');
 }
-function scrollToTop() { window.scrollTo({top:0, behavior:'smooth'}); }
+
+function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('mobile-open'); }
-function showToast(msg, err=false) {
+
+function showToast(msg, err = false) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'toast' + (err ? ' error' : '') + ' show';
+  t.textContent = msg;
+  t.className = 'toast' + (err ? ' error' : '') + ' show';
   setTimeout(() => t.classList.remove('show'), 3000);
 }
-document.getElementById('detailModal').addEventListener('click', e => { if(e.target === document.getElementById('detailModal')) closeModal(); });
-document.getElementById('authModal').addEventListener('click', e => { if(e.target === document.getElementById('authModal')) closeAuthModal(); });
-document.getElementById('addModal').addEventListener('click', e => { if(e.target === document.getElementById('addModal')) closeAddModal(); });
-document.getElementById('adminModal').addEventListener('click', e => { if(e.target === document.getElementById('adminModal')) closeAdminModal(); });
+
+document.getElementById('detailModal').addEventListener('click', e => { if (e.target === document.getElementById('detailModal')) closeModal(); });
+document.getElementById('authModal').addEventListener('click', e => { if (e.target === document.getElementById('authModal')) closeAuthModal(); });
+document.getElementById('addModal').addEventListener('click', e => { if (e.target === document.getElementById('addModal')) closeAddModal(); });
+document.getElementById('adminModal').addEventListener('click', e => { if (e.target === document.getElementById('adminModal')) closeAdminModal(); });
 
 init();
 </script>
