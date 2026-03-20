@@ -1,126 +1,235 @@
-# 🍳 Recepty jednoduše
+# 🍳 Recepty jednoduše + Supabase
 
-> Vařte s radostí každý den — stovky receptů, jednoduché postupy a chuťové zážitky na dosah ruky.
+> Vařte s radostí každý den — nyní s plným backendem včetně databáze, autentizace a real-time aktualizací!
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+## 🗄️ Co je Supabase?
 
-## ✨ Funkce
+**Supabase** je open-source alternativa k Firebase, postavená na PostgreSQL databázi.
 
-- 🍴 **Kategorie receptů** - Snídaně, obědy, večeře, dezerty, zdravé recepty
-- 🔍 **Vyhledávání** - Rychlé hledání receptů podle názvu
-- ⚙️ **Filtry** - Doba přípravy, obtížnost, dieta
-- ⭐ **Hodnocení** - Ohodnoťte své oblíbené recepty
-- ➕ **Přidání receptu** - Přidejte vlastní recepty
-- 📱 **Responsivní design** - Funguje na všech zařízeních
+| Funkce | Popis |
+|--------|-------|
+| **Database** | PostgreSQL s real-time subscriptions |
+| **Auth** | Přihlašování (email, Google, GitHub...) |
+| **Storage** | Ukládání obrázků a souborů |
+| **Edge Functions** | Serverless funkce |
+| **Real-time** | Live aktualizace dat |
 
-## 🖼️ Obrázky receptů
+---
 
-Aplikace obsahuje profesionální fotografie pro všechny recepty:
-- 🍝 Carbonara
-- 🥗 Řecký salát
-- 🥣 Dýňová polévka
-- 🍫 Lávový dort
-- 🥑 Avokádový toast
-- 🥩 Hovězí steak
-- 🍣 Sushi bowl
-- 🥞 Banánové lívance
-- 🍕 Pizza Margherita
-- 🍛 Zeleninové kari
-- 🐟 Pečený losos
-- 🌮 Tacos
+## 🚀 Rychlý start
 
-## 🚀 Deployment na Render.com
+### Krok 1: Vytvoření Supabase projektu
 
-### Metoda 1: Automatický deployment z GitHub (Doporučeno)
+1. Jdi na [supabase.com](https://supabase.com)
+2. Klikni **"Start your project"** a přihlaš se přes GitHub
+3. Vytvoř nový projekt:
+   - **Name**: `recepty-jednoduse`
+   - **Database Password**: (vygeneruj silné heslo)
+   - **Region**: `Central EU (Frankfurt)`
+4. Klikni **"Create new project"**
 
-1. **Vytvoř repozitář na GitHub**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/TVOJE-USERNAME/recepty-jednoduse.git
-   git push -u origin main
-   ```
+### Krok 2: Získání API klíčů
 
-2. **Připojení k Render.com**
-   - Jdi na [render.com](https://render.com) a přihlaš se
-   - Klikni na **"New +"** → **"Web Service"**
-   - Připoj svůj GitHub repozitář
-   - Render automaticky detekuje `render.yaml` a nastaví vše za tebe
+V Supabase dashboardu:
+1. Jdi do **Project Settings** → **API**
+2. Zkopíruj:
+   - `Project URL` (např. `https://xxxxx.supabase.co`)
+   - `anon public` API klíč
 
-3. **Hotovo!** 🎉
-   - Render automaticky nasadí tvou aplikaci
-   - Dostaneš URL ve formátu: `https://recepty-jednoduse-xxx.onrender.com`
+### Krok 3: Vytvoření databázových tabulek
 
-### Metoda 2: Manuální nastavení
+V Supabase dashboardu:
+1. Jdi do **SQL Editor** → **New query**
+2. Vlož obsah souboru `supabase-schema.sql`
+3. Klikni **"Run"**
 
-Pokud nechceš použít Blueprint:
+### Krok 4: Konfigurace aplikace
 
-1. Vytvoř nový **Web Service**
-2. **Runtime**: Node
-3. **Build Command**: `npm install`
-4. **Start Command**: `npm start`
-5. **Plan**: Free
+V souboru `index.html` najdi tuto část a doplň své údaje:
 
-## 🛠️ Lokální vývoj
-
-### Požadavky
-- Node.js 18+ 
-- npm nebo yarn
-
-### Instalace
-
-```bash
-# Naklonuj repozitář
-git clone https://github.com/TVOJE-USERNAME/recepty-jednoduse.git
-cd recepty-jednoduse
-
-# Nainstaluj závislosti
-npm install
-
-# Spusť vývojový server
-npm start
+```javascript
+const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_PUBLIC_KEY';
 ```
 
-Aplikace běží na `http://localhost:3000`
+---
+
+## 📊 Databázové tabulky
+
+### `categories` - Kategorie receptů
+| Sloupec | Typ | Popis |
+|---------|-----|-------|
+| id | serial | Primární klíč |
+| slug | varchar | Unikátní identifikátor |
+| name | varchar | Název kategorie |
+| emoji | varchar | Emoji ikona |
+
+### `recipes` - Recepty
+| Sloupec | Typ | Popis |
+|---------|-----|-------|
+| id | serial | Primární klíč |
+| name | varchar | Název receptu |
+| slug | varchar | Unikátní URL |
+| description | text | Popis |
+| category_id | integer | Reference na kategorii |
+| image_url | text | URL obrázku |
+| time_minutes | integer | Doba přípravy |
+| servings | integer | Počet porcí |
+| difficulty | varchar | Obtížnost (easy/medium/hard) |
+| rating | decimal | Průměrné hodnocení |
+| rating_count | integer | Počet hodnocení |
+| author_id | uuid | Autor receptu |
+| is_public | boolean | Veřejný/schovaný |
+
+### `ingredients` - Ingredience
+| Sloupec | Typ | Popis |
+|---------|-----|-------|
+| id | serial | Primární klíč |
+| recipe_id | integer | Reference na recept |
+| name | varchar | Název ingredience |
+| amount | varchar | Množství |
+| order_index | integer | Pořadí |
+
+### `steps` - Kroky přípravy
+| Sloupec | Typ | Popis |
+|---------|-----|-------|
+| id | serial | Primární klíč |
+| recipe_id | integer | Reference na recept |
+| description | text | Popis kroku |
+| emoji | varchar | Emoji ikona |
+| order_index | integer | Pořadí |
+
+### `favorites` - Oblíbené recepty
+| Sloupec | Typ | Popis |
+|---------|-----|-------|
+| user_id | uuid | Uživatel |
+| recipe_id | integer | Recept |
+
+### `ratings` - Hodnocení
+| Sloupec | Typ | Popis |
+|---------|-----|-------|
+| user_id | uuid | Uživatel |
+| recipe_id | integer | Recept |
+| rating | integer | Hodnocení 1-5 |
+
+---
+
+## 🔐 Bezpečnost (Row Level Security)
+
+Databáze používá RLS (Row Level Security) pro ochranu dat:
+
+- **Veřejné recepty** - viditelné pro všechny
+- **Vlastní recepty** - uživatel vidí své recepty i když nejsou veřejné
+- **Oblíbené** - každý uživatel vidí jen své oblíbené
+- **Hodnocení** - veřejně viditelná, ale měnit může jen autor
+
+---
+
+## ⚡ Real-time funkce
+
+Aplikace automaticky sleduje změny v databázi:
+- Nové recepty se objeví okamžitě
+- Aktualizace hodnocení jsou live
+- Přidání do oblíbených je okamžité
+
+---
 
 ## 📁 Struktura projektu
 
 ```
-recepty-jednoduse/
-├── index.html          # Hlavní HTML soubor
-├── server.js           # Express server
-├── package.json        # Node.js konfigurace
-├── render.yaml         # Render.com konfigurace
-├── README.md           # Tento soubor
-├── .gitignore          # Git ignore soubor
-└── images/             # Obrázky receptů
-    ├── carbonara.jpg
-    ├── greek-salad.jpg
-    ├── pumpkin-soup.jpg
-    ├── lava-cake.jpg
-    ├── avocado-toast.jpg
-    ├── steak.jpg
-    ├── sushi-bowl.jpg
-    ├── pancakes.jpg
-    ├── pizza.jpg
-    ├── curry.jpg
-    ├── salmon.jpg
-    └── tacos.jpg
+recepty-supabase/
+├── index.html              # Hlavní aplikace s Supabase
+├── supabase-schema.sql     # SQL pro vytvoření tabulek
+├── server.js               # Express server
+├── package.json            # Node.js konfigurace
+├── render.yaml             # Render.com konfigurace
+├── README.md               # Tento soubor
+└── .gitignore              # Git ignore
 ```
-
-## 🔧 Konfigurace
-
-### Environment variables
-- `PORT` - Port na kterém běží server (default: 3000)
-- `NODE_ENV` - Prostředí (development/production)
-
-## 📝 Licence
-
-MIT License - volně k použití a úpravám.
 
 ---
 
-Vytvořeno s ❤️ pro milovníky vaření.
+## 🚀 Deployment na Render.com
+
+### 1. Pushni kód na GitHub
+
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/TVOJE-USERNAME/recepty-supabase.git
+git push -u origin main
+```
+
+### 2. Vytvoř Web Service na Render
+
+1. Jdi na [dashboard.render.com](https://dashboard.render.com)
+2. **New +** → **Web Service**
+3. Připoj GitHub repozitář
+4. Nastavení:
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Plan**: Free
+
+### 3. Hotovo! 🎉
+
+---
+
+## 🛠️ Lokální vývoj
+
+```bash
+# Instalace závislostí
+npm install
+
+# Spuštění serveru
+npm start
+
+# Aplikace běží na http://localhost:3000
+```
+
+---
+
+## ✨ Funkce aplikace
+
+### Pro nepřihlášené uživatele:
+- ✅ Prohlížení všech veřejných receptů
+- ✅ Filtrování podle kategorie, času, obtížnosti
+- ✅ Vyhledávání receptů
+- ✅ Zobrazení detailu receptu
+- ✅ Vidět hodnocení
+
+### Pro přihlášené uživatele:
+- ✅ Vše výše + 
+- ✅ Přidávání vlastních receptů
+- ✅ Ukládání receptů do oblíbených
+- ✅ Hodnocení receptů
+- ✅ Real-time aktualizace
+
+---
+
+## 🔧 Troubleshooting
+
+### Chyba: "Invalid API key"
+- Zkontroluj, že jsi správně zkopíroval `anon public` klíč
+- Ujisti se, že URL končí na `.supabase.co`
+
+### Recepty se nenačítají
+- Zkontroluj v Supabase **Table Editor**, zda existují tabulky
+- Ověř v **Authentication** → **Policies**, že jsou nastaveny RLS policies
+
+### Nepřihlašuje to
+- V **Authentication** → **Providers** musí být zapnutý **Email**
+- Pro testování můžeš vypnout email confirmation v **Settings**
+
+---
+
+## 📚 Užitečné odkazy
+
+- [Supabase Dokumentace](https://supabase.com/docs)
+- [Supabase JavaScript Client](https://supabase.com/docs/reference/javascript)
+- [PostgreSQL Dokumentace](https://www.postgresql.org/docs/)
+
+---
+
+Vytvořeno s ❤️ a 🍳

@@ -1,7 +1,7 @@
 {
-  "name": "recepty-jednoduse",
+  "name": "recepty-jednoduse-supabase",
   "version": "1.0.0",
-  "description": "Recepty jednoduše - Webová aplikace pro recepty",
+  "description": "Recepty jednoduše s Supabase backendem",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,6 +9,7 @@
   },
   "keywords": [
     "recipes",
+    "supabase",
     "cooking",
     "food",
     "czech"

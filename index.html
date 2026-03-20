@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recepty jednoduše</title>
+<title>Recepty jednoduše - Supabase</title>
+<!-- Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -33,7 +35,6 @@ body {
   min-height: 100vh;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--beige-dark); }
 ::-webkit-scrollbar-thumb { background: var(--orange-light); border-radius: 4px; }
@@ -57,12 +58,23 @@ nav {
   transition: all 0.3s;
 }
 .nav-links a:hover, .nav-links a.active { background: var(--orange); color: white; }
-.btn-add {
+.btn-add, .btn-login {
   background: var(--green); color: white; border: none;
   padding: 10px 20px; border-radius: 25px; font-weight: 600;
   cursor: pointer; font-size: 0.9em; transition: all 0.3s;
 }
-.btn-add:hover { background: var(--green-light); transform: scale(1.05); }
+.btn-add:hover, .btn-login:hover { background: var(--green-light); transform: scale(1.05); }
+.btn-login { background: var(--orange); margin-left: 8px; }
+.btn-login:hover { background: var(--orange-light); }
+.user-menu {
+  display: flex; align-items: center; gap: 10px;
+}
+.user-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--orange); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.9em;
+}
 .nav-hamburger { display: none; background: none; border: none; font-size: 1.5em; cursor: pointer; }
 
 /* HERO */
@@ -203,6 +215,30 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20p
 .difficulty.easy { background: #E8F5E9; color: var(--green); }
 .difficulty.medium { background: #FFF3E0; color: var(--orange); }
 .difficulty.hard { background: #FFEBEE; color: #C62828; }
+.favorite-btn {
+  position: absolute; top: 12px; left: 12px;
+  background: rgba(255,255,255,0.9); border: none;
+  width: 36px; height: 36px; border-radius: 50%;
+  cursor: pointer; font-size: 1.2em;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s;
+}
+.favorite-btn:hover { transform: scale(1.1); }
+.favorite-btn.active { background: #FF4081; }
+
+/* LOADING */
+.loading {
+  text-align: center; padding: 60px 20px;
+}
+.spinner {
+  width: 50px; height: 50px;
+  border: 4px solid var(--beige-dark);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* DETAIL MODAL */
 .modal-overlay {
@@ -270,15 +306,19 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20p
 .step-content { flex: 1; }
 .step-content p { margin-bottom: 8px; }
 .step-emoji { font-size: 2em; }
-.gallery { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
-.gallery-item {
-  width: 80px; height: 80px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2.5em; cursor: pointer; transition: transform 0.3s;
-  background-size: cover;
-  background-position: center;
+
+/* AUTH MODAL */
+.auth-tabs {
+  display: flex; gap: 10px; margin-bottom: 20px;
 }
-.gallery-item:hover { transform: scale(1.15); }
+.auth-tab {
+  flex: 1; padding: 12px; border: 2px solid var(--beige-dark);
+  background: white; border-radius: 10px; cursor: pointer;
+  font-weight: 600; transition: all 0.3s;
+}
+.auth-tab.active {
+  background: var(--orange); color: white; border-color: var(--orange);
+}
 
 /* ADD RECIPE MODAL */
 .add-modal .modal-body h1 { font-size: 1.6em; }
@@ -297,6 +337,13 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20p
   cursor: pointer; font-size: 1.05em; transition: all 0.3s; width: 100%;
 }
 .btn-submit:hover { background: var(--orange-light); transform: scale(1.02); }
+.btn-secondary {
+  background: var(--beige-dark); color: var(--text);
+  border: none; padding: 14px 32px; border-radius: 12px;
+  font-weight: 700; cursor: pointer; font-size: 1.05em;
+  transition: all 0.3s; width: 100%; margin-top: 10px;
+}
+.btn-secondary:hover { background: var(--beige); }
 
 /* FOOTER */
 footer {
@@ -311,14 +358,6 @@ footer {
 .footer-col p, .footer-col a { font-size: 0.9em; line-height: 2; }
 .footer-col a { color: rgba(255,255,255,0.7); text-decoration: none; display: block; transition: color 0.3s; }
 .footer-col a:hover { color: var(--orange-light); }
-.social-links { display: flex; gap: 12px; margin-top: 10px; }
-.social-links a {
-  width: 42px; height: 42px; border-radius: 50%;
-  background: rgba(255,255,255,0.1); display: flex;
-  align-items: center; justify-content: center; font-size: 1.3em;
-  transition: all 0.3s;
-}
-.social-links a:hover { background: var(--orange); transform: translateY(-3px); }
 .footer-bottom {
   text-align: center; margin-top: 40px; padding-top: 20px;
   border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.85em;
@@ -366,6 +405,7 @@ footer {
   border-radius: 12px; font-weight: 600; z-index: 300;
   transition: transform 0.4s ease; box-shadow: var(--shadow-hover);
 }
+.toast.error { background: #f44336; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
@@ -383,7 +423,10 @@ footer {
     <a href="#" onclick="filterCategory('dezerty')">🍰 Dezerty</a>
     <a href="#" onclick="filterCategory('zdrave')">🥗 Zdravé</a>
   </div>
-  <button class="btn-add" onclick="openAddModal()">➕ Přidat recept</button>
+  <div class="user-menu" id="userMenu">
+    <button class="btn-add" onclick="openAddModal()">➕ Přidat recept</button>
+    <button class="btn-login" id="loginBtn" onclick="openAuthModal()">👤 Přihlásit</button>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -394,7 +437,7 @@ footer {
     <h1>Recepty jednoduše</h1>
     <p>Vařte s radostí každý den — stovky receptů, jednoduché postupy a chuťové zážitky na dosah ruky.</p>
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Hledat recepty... (např. těstoviny, dort)" oninput="searchRecipes()">
+      <input type="text" id="searchInput" placeholder="Hledat recepty..." oninput="searchRecipes()">
       <button onclick="searchRecipes()">🔍</button>
     </div>
   </div>
@@ -446,9 +489,14 @@ footer {
     <div class="recipes-header">
       <h2>📖 Recepty</h2>
       <button class="filter-mobile-btn" onclick="toggleSidebar()">⚙️ Filtry</button>
-      <span class="recipes-count" id="recipesCount"></span>
+      <span class="recipes-count" id="recipesCount">Načítání...</span>
     </div>
-    <div class="recipes-grid" id="recipesGrid"></div>
+    <div class="recipes-grid" id="recipesGrid">
+      <div class="loading" style="grid-column: 1/-1;">
+        <div class="spinner"></div>
+        <p>Načítání receptů z databáze...</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -462,6 +510,43 @@ footer {
   </div>
 </div>
 
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal" style="max-width: 450px;">
+    <div class="modal-body">
+      <button class="modal-close" onclick="closeAuthModal()" style="position:absolute;top:16px;right:16px">✕</button>
+      <h1>👤 Přihlášení</h1>
+      <br>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login')" id="tab-login">Přihlásit se</button>
+        <button class="auth-tab" onclick="switchAuthTab('register')" id="tab-register">Registrovat</button>
+      </div>
+      <div id="loginForm">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="authEmail" placeholder="vas@email.cz">
+        </div>
+        <div class="form-group">
+          <label>Heslo</label>
+          <input type="password" id="authPassword" placeholder="••••••••">
+        </div>
+        <button class="btn-submit" onclick="handleLogin()">🔑 Přihlásit se</button>
+      </div>
+      <div id="registerForm" style="display:none;">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="regEmail" placeholder="vas@email.cz">
+        </div>
+        <div class="form-group">
+          <label>Heslo</label>
+          <input type="password" id="regPassword" placeholder="Min. 6 znaků">
+        </div>
+        <button class="btn-submit" onclick="handleRegister()">✨ Vytvořit účet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ADD MODAL -->
 <div class="modal-overlay" id="addModal">
   <div class="modal add-modal" style="max-width:600px">
@@ -470,17 +555,17 @@ footer {
       <h1>➕ Přidat nový recept</h1>
       <br>
       <div class="form-group">
-        <label>Název receptu</label>
+        <label>Název receptu *</label>
         <input type="text" id="newName" placeholder="Např. Čokoládový dort">
       </div>
       <div class="form-group">
-        <label>Kategorie</label>
+        <label>Kategorie *</label>
         <select id="newCat">
-          <option value="snidane">Snídaně</option>
-          <option value="obedy">Obědy</option>
-          <option value="vecere">Večeře</option>
-          <option value="dezerty">Dezerty</option>
-          <option value="zdrave">Zdravé</option>
+          <option value="1">Snídaně</option>
+          <option value="2">Obědy</option>
+          <option value="3">Večeře</option>
+          <option value="4">Dezerty</option>
+          <option value="5">Zdravé</option>
         </select>
       </div>
       <div class="form-group">
@@ -488,23 +573,31 @@ footer {
         <input type="text" id="newDesc" placeholder="Lahodný a jednoduchý recept...">
       </div>
       <div class="form-group">
-        <label>Doba přípravy (min)</label>
+        <label>URL obrázku</label>
+        <input type="url" id="newImage" placeholder="https://... (nepovinné)">
+      </div>
+      <div class="form-group">
+        <label>Doba přípravy (min) *</label>
         <input type="number" id="newTime" placeholder="30" value="30">
+      </div>
+      <div class="form-group">
+        <label>Počet porcí</label>
+        <input type="number" id="newServings" placeholder="4" value="4">
       </div>
       <div class="form-group">
         <label>Obtížnost</label>
         <select id="newDiff">
           <option value="easy">Snadné</option>
-          <option value="medium">Střední</option>
+          <option value="medium" selected>Střední</option>
           <option value="hard">Náročné</option>
         </select>
       </div>
       <div class="form-group">
-        <label>Ingredience (každá na nový řádek)</label>
+        <label>Ingredience (každá na nový řádek) *</label>
         <textarea id="newIngredients" placeholder="200g mouky&#10;3 vejce&#10;100ml mléka"></textarea>
       </div>
       <div class="form-group">
-        <label>Postup (každý krok na nový řádek)</label>
+        <label>Postup (každý krok na nový řádek) *</label>
         <textarea id="newSteps" placeholder="Smíchejte suché ingredience.&#10;Přidejte vejce a mléko.&#10;Pečte 30 minut."></textarea>
       </div>
       <button class="btn-submit" onclick="addRecipe()">🍳 Přidat recept</button>
@@ -557,278 +650,636 @@ footer {
 </footer>
 
 <script>
-const recipes = [
-  {
-    id:1, name:"Kremové těstoviny Carbonara", cat:"obedy", emoji:"🍝", image:"images/carbonara.jpg",
-    desc:"Klasická italská Carbonara s křupavou pancettou, smetanovou omáčkou a parmezánem.",
-    time:25, servings:4, difficulty:"medium", rating:5,
-    diets:[],
-    ingredients:["400g špagety","200g pancetta","4 žloutky","100g pecorino","50g parmezán","Černý pepř","Sůl","2 stroužky česneku"],
-    steps:[
-      {text:"Uvařte těstoviny al dente ve velké nádobě s osolenou vodou.", emoji:"🍝"},
-      {text:"Na pánvi opečte nakrájenou pancettu do křupava.", emoji:"🥓"},
-      {text:"V misce smíchejte žloutky s nastrouhaným sýrem a pepřem.", emoji:"🥚"},
-      {text:"Scezené těstoviny přidejte k pancettě, stáhněte z ohně.", emoji:"🔥"},
-      {text:"Vmíchejte vaječnou směs a rychle promíchejte.", emoji:"🥄"},
-      {text:"Podávejte ihned s extra parmezánem a pepřem.", emoji:"🍽️"}
-    ],
-    gallery:["images/carbonara.jpg","images/greek-salad.jpg","images/pumpkin-soup.jpg"]
-  },
-  {
-    id:2, name:"Řecký salát s fetou", cat:"zdrave", emoji:"🥗", image:"images/greek-salad.jpg",
-    desc:"Svěží středomořský salát plný barev, chutí a zdravých ingrediencí.",
-    time:10, servings:2, difficulty:"easy", rating:4,
-    diets:["vegetarian","gluten-free","low-carb"],
-    ingredients:["2 rajčata","1 okurka","1 zelená paprika","Červená cibule","150g feta","Kalamata olivy","Olivový olej","Oregano","Sůl, pepř"],
-    steps:[
-      {text:"Nakrájejte zeleninu na větší kousky.", emoji:"🔪"},
-      {text:"Smíchejte v míse rajčata, okurku, papriku a cibuli.", emoji:"🥗"},
-      {text:"Přidejte olivy a nakrájenou fetu.", emoji:"🧀"},
-      {text:"Zakápněte olivovým olejem a posypte oregánem.", emoji:"🫒"},
-      {text:"Podávejte s čerstvým chlebem.", emoji:"🍞"}
-    ],
-    gallery:["images/greek-salad.jpg","images/salmon.jpg","images/sushi-bowl.jpg"]
-  },
-  {
-    id:3, name:"Dýňová polévka", cat:"obedy", emoji:"🥣", image:"images/pumpkin-soup.jpg",
-    desc:"Krémová podzimní polévka z pečené dýně s trochou muškátového oříšku.",
-    time:45, servings:6, difficulty:"easy", rating:5,
-    diets:["vegetarian","vegan","gluten-free"],
-    ingredients:["1 kg hokkaido dýně","2 mrkve","1 cibule","3 stroužky česneku","500ml zeleninový vývar","Kokosové mléko","Muškátový oříšek","Olivový olej","Sůl, pepř"],
-    steps:[
-      {text:"Dýni nakrájejte a pečte v troubě při 200°C 25 minut.", emoji:"🎃"},
-      {text:"Na oleji orestujte cibuli s česnekem.", emoji:"🧅"},
-      {text:"Přidejte pečenou dýni, mrkev a vývar.", emoji:"🥕"},
-      {text:"Vařte 15 minut a rozmixujte dohladka.", emoji:"🔄"},
-      {text:"Dochutě kokosovým mlékem a kořením. Servírujte.", emoji:"🥣"}
-    ],
-    gallery:["images/pumpkin-soup.jpg","images/curry.jpg","images/avocado-toast.jpg"]
-  },
-  {
-    id:4, name:"Čokoládový lávový dort", cat:"dezerty", emoji:"🍫", image:"images/lava-cake.jpg",
-    desc:"Dekadentní dort s tekutým čokoládovým středem — dokonalý dezert pro čokoholiky.",
-    time:30, servings:2, difficulty:"medium", rating:5,
-    diets:[],
-    ingredients:["100g hořká čokoláda","80g máslo","2 vejce","2 žloutky","40g cukr","30g mouka","Špetka soli","Kakao na vysypání"],
-    steps:[
-      {text:"Rozpusťte čokoládu s máslem ve vodní lázni.", emoji:"🍫"},
-      {text:"Vyšlehejte vejce s cukrem do pěny.", emoji:"🥚"},
-      {text:"Opatrně vmíchejte čokoládovou směs a mouku.", emoji:"🥄"},
-      {text:"Nalijte do vymaštěných formiček.", emoji:"🧁"},
-      {text:"Pečte při 220°C přesně 12 minut.", emoji:"🔥"},
-      {text:"Vyklopte na talíř a ihned podávejte.", emoji:"🍽️"}
-    ],
-    gallery:["images/lava-cake.jpg","images/pancakes.jpg","images/pizza.jpg"]
-  },
-  {
-    id:5, name:"Avokádový toast s vejcem", cat:"snidane", emoji:"🥑", image:"images/avocado-toast.jpg",
-    desc:"Zdravá a výživná snídaně — křupavý toast s krémovým avokádem a pošírovaným vejcem.",
-    time:15, servings:1, difficulty:"easy", rating:4,
-    diets:["vegetarian"],
-    ingredients:["2 plátky kváskového chleba","1 zralé avokádo","2 vejce","Limetková šťáva","Chilli vločky","Sůl, pepř","Cherry rajčátka","Microgreens"],
-    steps:[
-      {text:"Opečte chléb do křupava.", emoji:"🍞"},
-      {text:"Rozmačkejte avokádo s limetkou, solí a pepřem.", emoji:"🥑"},
-      {text:"Pošírujte vejce ve vodě s octem.", emoji:"🥚"},
-      {text:"Namažte avokádo na toast, položte vejce.", emoji:"🍳"},
-      {text:"Dozdobte rajčátky, chilli a microgreens.", emoji:"🌿"}
-    ],
-    gallery:["images/avocado-toast.jpg","images/pancakes.jpg","images/salmon.jpg"]
-  },
-  {
-    id:6, name:"Hovězí steak s bylinkovým máslem", cat:"vecere", emoji:"🥩", image:"images/steak.jpg",
-    desc:"Šťavnatý steak medium-rare s rozpuštěným bylinkovým máslem a grilovanou zeleninou.",
-    time:35, servings:2, difficulty:"hard", rating:5,
-    diets:["gluten-free","low-carb"],
-    ingredients:["2x hovězí ribeye (250g)","Bylinkové máslo","Rozmarýn, tymián","4 stroužky česneku","Olivový olej","Sůl, pepř","Grilovaný chřest","Baby brambory"],
-    steps:[
-      {text:"Maso vytáhněte z lednice 30 min předem, osolte a opepřete.", emoji:"🥩"},
-      {text:"Rozpalte pánev na maximum s olejem.", emoji:"🔥"},
-      {text:"Opečte steak 3 min z každé strany pro medium-rare.", emoji:"⏱️"},
-      {text:"Přidejte máslo, česnek a bylinky, polijte maso.", emoji:"🧈"},
-      {text:"Nechte odpočívat 5 minut pod folií.", emoji:"🍽️"},
-      {text:"Podávejte s grilovaným chřestem a bramborami.", emoji:"🥦"}
-    ],
-    gallery:["images/steak.jpg","images/salmon.jpg","images/tacos.jpg"]
-  },
-  {
-    id:7, name:"Sushi bowl s lososem", cat:"zdrave", emoji:"🍣", image:"images/sushi-bowl.jpg",
-    desc:"Barevná miska plná čerstvého lososa, sushi rýže, avokáda a pikantní omáčky.",
-    time:30, servings:2, difficulty:"medium", rating:4,
-    diets:["gluten-free"],
-    ingredients:["250g sushi rýže","200g čerstvý losos","1 avokádo","1 mrkev","Edamame","Nori řasy","Sójová omáčka","Sezamová semínka","Sriracha mayo"],
-    steps:[
-      {text:"Uvařte sushi rýži podle návodu a ochutě octem.", emoji:"🍚"},
-      {text:"Nakrájejte lososa na tenké plátky.", emoji:"🐟"},
-      {text:"Připravte zeleninu — avokádo, mrkev, edamame.", emoji:"🥑"},
-      {text:"Do misky dejte rýži a naaranžujte ingredience.", emoji:"🍣"},
-      {text:"Zakápněte sójovou omáčkou a sriracha mayo.", emoji:"🌶️"}
-    ],
-    gallery:["images/sushi-bowl.jpg","images/salmon.jpg","images/greek-salad.jpg"]
-  },
-  {
-    id:8, name:"Banánové lívance", cat:"snidane", emoji:"🥞", image:"images/pancakes.jpg",
-    desc:"Nadýchané lívance s banánem, borůvkami a javorovým sirupem — ideální víkendová snídaně.",
-    time:20, servings:2, difficulty:"easy", rating:4,
-    diets:["vegetarian"],
-    ingredients:["2 zralé banány","2 vejce","150g mouky","120ml mléka","1 lžička prášku do pečiva","Vanilkový extrakt","Borůvky","Javorový sirup","Máslo"],
-    steps:[
-      {text:"Rozmačkejte banány a smíchejte s vejci.", emoji:"🍌"},
-      {text:"Přidejte mouku, mléko, prášek a vanilku.", emoji:"🥣"},
-      {text:"Na rozpálenou pánev s máslem lijte těsto.", emoji:"🍳"},
-      {text:"Pečte 2 minuty z každé strany do zlatova.", emoji:"⏱️"},
-      {text:"Servírujte s borůvkami a javorovým sirupem.", emoji:"🥞"}
-    ],
-    gallery:["images/pancakes.jpg","images/lava-cake.jpg","images/avocado-toast.jpg"]
-  },
-  {
-    id:9, name:"Domácí pizza Margherita", cat:"vecere", emoji:"🍕", image:"images/pizza.jpg",
-    desc:"Autentická neapolská pizza s křupavým těstem, San Marzano rajčaty a mozzarellou.",
-    time:90, servings:4, difficulty:"hard", rating:5,
-    diets:["vegetarian"],
-    ingredients:["500g pizza mouka","7g sušené droždí","300ml voda","2 lžíce olivového oleje","San Marzano rajčata","250g mozzarella","Čerstvá bazalka","Sůl"],
-    steps:[
-      {text:"Smíchejte mouku, droždí, vodu, olej a sůl. Hnětěte 10 min.", emoji:"🫓"},
-      {text:"Nechte kynout 1 hodinu v teple.", emoji:"⏰"},
-      {text:"Připravte rajčatovou omáčku z drcených rajčat.", emoji:"🍅"},
-      {text:"Rozválejte těsto a potřete omáčkou.", emoji:"🔄"},
-      {text:"Přidejte natrhanou mozzarellu.", emoji:"🧀"},
-      {text:"Pečte při 250°C 10-12 minut. Ozdobte bazalkou.", emoji:"🍕"}
-    ],
-    gallery:["images/pizza.jpg","images/steak.jpg","images/carbonara.jpg"]
-  },
-  {
-    id:10, name:"Zeleninové kari s kokosem", cat:"vecere", emoji:"🍛", image:"images/curry.jpg",
-    desc:"Aromatické thajské kari s kokosovým mlékem, zeleninou a voňavým jasmínovým rýží.",
-    time:35, servings:4, difficulty:"medium", rating:4,
-    diets:["vegetarian","vegan","gluten-free"],
-    ingredients:["400ml kokosové mléko","2 lžíce žluté kari pasty","1 cuketa","1 paprika","200g cizrna","150g špenát","Jasmínová rýže","Limetka","Koriander"],
-    steps:[
-      {text:"Na oleji orestujte kari pastu 1 minutu.", emoji:"🌶️"},
-      {text:"Přidejte kokosové mléko a nechte probublat.", emoji:"🥥"},
-      {text:"Vhoďte nakrájenou zeleninu a cizrnu.", emoji:"🥕"},
-      {text:"Vařte 15 minut, přidejte špenát.", emoji:"🥬"},
-      {text:"Podávejte s rýží, limetkou a koriandrem.", emoji:"🍛"}
-    ],
-    gallery:["images/curry.jpg","images/pumpkin-soup.jpg","images/sushi-bowl.jpg"]
-  },
-  {
-    id:11, name:"Pečený losos s citronem", cat:"obedy", emoji:"🐟", image:"images/salmon.jpg",
-    desc:"Jemný losos pečený s citronem, kapary a čerstvými bylinkami na másle.",
-    time:25, servings:2, difficulty:"easy", rating:5,
-    diets:["gluten-free","low-carb"],
-    ingredients:["2 filety lososa","1 citron","2 lžíce másla","Kapary","Kopr","Česnek","Sůl, pepř","Chřest"],
-    steps:[
-      {text:"Předehřejte troubu na 200°C.", emoji:"🔥"},
-      {text:"Lososa osolte, opepřete a polijte citronem.", emoji:"🍋"},
-      {text:"Položte na plech s máslem, kapary a koprem.", emoji:"🐟"},
-      {text:"Pečte 15-18 minut.", emoji:"⏰"},
-      {text:"Podávejte s grilovaným chřestem.", emoji:"🍽️"}
-    ],
-    gallery:["images/salmon.jpg","images/steak.jpg","images/greek-salad.jpg"]
-  },
-  {
-    id:12, name:"Tacos s trhaným masem", cat:"vecere", emoji:"🌮", image:"images/tacos.jpg",
-    desc:"Mexické tacos s pomalu pečeným trhaným vepřovým, guacamole a pikantní salsou.",
-    time:180, servings:6, difficulty:"hard", rating:5,
-    diets:[],
-    ingredients:["1kg vepřová plec","Kukuřičné tortilly","2 avokáda (guacamole)","Rajčatová salsa","Limetka","Koriander","Jalapeño","Zakysaná smetana","Římský salát"],
-    steps:[
-      {text:"Maso osolte, okořeňte a pečte při 160°C 3 hodiny.", emoji:"🥩"},
-      {text:"Maso roztrhejte vidličkami a promíchejte se šťávou.", emoji:"🍖"},
-      {text:"Připravte guacamole z avokáda, limetky a soli.", emoji:"🥑"},
-      {text:"Nahřejte tortilly na suché pánvi.", emoji:"🫓"},
-      {text:"Naplňte tortilly masem, guacamole a salsou.", emoji:"🌮"},
-      {text:"Ozdobte koriandrem, jalapeño a smetanou.", emoji:"🌿"}
-    ],
-    gallery:["images/tacos.jpg","images/pizza.jpg","images/carbonara.jpg"]
-  }
-];
+// ============================================
+// SUPABASE KONFIGURACE - ZDE ZADEJ SVÉ ÚDAJE
+// ============================================
+const SUPABASE_URL = 'https://bvyjornhpipyhaptqkbc.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2eWpvcm5ocGlweWhhcHRxa2JjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMDE0NzcsImV4cCI6MjA4OTU3NzQ3N30.IRckFTu3SoQHflZiPUv2EhKW_aJP9msgurW2PEzl1FM';
 
+// Inicializace Supabase klienta
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ============================================
+// GLOBALNÍ PROMĚNNÉ
+// ============================================
+let currentUser = null;
 let currentCategory = 'all';
-let currentRecipes = [...recipes];
+let currentRecipes = [];
+let categories = [];
+let userFavorites = [];
 
-function scrollToTop() {
-  window.scrollTo({top:0, behavior:'smooth'});
+// ============================================
+// INICIALIZACE A NAČTENÍ DAT
+// ============================================
+async function init() {
+  // Kontrola přihlášení
+  const { data: { user } } = await supabase.auth.getUser();
+  currentUser = user;
+  updateUserUI();
+  
+  // Načtení kategorií
+  await loadCategories();
+  
+  // Načtení receptů
+  await loadRecipes();
+  
+  // Načtení oblíbených (pokud je uživatel přihlášen)
+  if (currentUser) {
+    await loadFavorites();
+  }
+  
+  // Real-time subscription na změny
+  subscribeToChanges();
 }
 
-function toggleNav() {
-  document.getElementById('navLinks').classList.toggle('open');
+async function loadCategories() {
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*')
+    .order('id');
+  
+  if (error) {
+    console.error('Chyba při načítání kategorií:', error);
+    return;
+  }
+  
+  categories = data || [];
 }
 
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('mobile-open');
+async function loadRecipes() {
+  const grid = document.getElementById('recipesGrid');
+  grid.innerHTML = `
+    <div class="loading" style="grid-column: 1/-1;">
+      <div class="spinner"></div>
+      <p>Načítání receptů z databáze...</p>
+    </div>
+  `;
+  
+  let query = supabase
+    .from('recipes')
+    .select(`
+      *,
+      categories(name, emoji),
+      recipe_diets(diets(slug, name, emoji))
+    `)
+    .eq('is_public', true);
+  
+  if (currentCategory !== 'all') {
+    const catId = categories.find(c => c.slug === currentCategory)?.id;
+    if (catId) query = query.eq('category_id', catId);
+  }
+  
+  const { data, error } = await query.order('created_at', { ascending: false });
+  
+  if (error) {
+    console.error('Chyba při načítání receptů:', error);
+    showToast('❌ Chyba při načítání receptů', true);
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;"><p>Chyba při načítání. Zkuste to znovu.</p></div>';
+    return;
+  }
+  
+  currentRecipes = data || [];
+  renderRecipes(currentRecipes);
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+async function loadFavorites() {
+  if (!currentUser) return;
+  
+  const { data, error } = await supabase
+    .from('favorites')
+    .select('recipe_id')
+    .eq('user_id', currentUser.id);
+  
+  if (error) {
+    console.error('Chyba při načítání oblíbených:', error);
+    return;
+  }
+  
+  userFavorites = data?.map(f => f.recipe_id) || [];
 }
 
+// ============================================
+// REAL-TIME SUBSCRIPTIONS
+// ============================================
+function subscribeToChanges() {
+  // Sledování nových receptů
+  supabase
+    .channel('recipes')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'recipes' }, (payload) => {
+      console.log('Změna v receptech:', payload);
+      loadRecipes();
+    })
+    .subscribe();
+}
+
+// ============================================
+// RENDER FUNKCE
+// ============================================
 function renderRecipes(list) {
   const grid = document.getElementById('recipesGrid');
   const count = document.getElementById('recipesCount');
   count.textContent = `${list.length} receptů`;
-  if(list.length === 0) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-light)"><div style="font-size:60px;margin-bottom:16px">🔍</div><h3>Žádné recepty nenalezeny</h3><p>Zkuste změnit filtry nebo hledaný výraz.</p></div>';
+  
+  if (list.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-light)">
+        <div style="font-size:60px;margin-bottom:16px">🔍</div>
+        <h3>Žádné recepty nenalezeny</h3>
+        <p>Zkuste změnit filtry nebo hledaný výraz.</p>
+      </div>
+    `;
     return;
   }
+  
   grid.innerHTML = list.map(r => {
-    const stars = '★'.repeat(r.rating) + '☆'.repeat(5-r.rating);
-    const diffLabel = r.difficulty==='easy'?'Snadné':r.difficulty==='medium'?'Střední':'Náročné';
+    const stars = '★'.repeat(Math.round(r.rating || 0)) + '☆'.repeat(5 - Math.round(r.rating || 0));
+    const diffLabel = r.difficulty === 'easy' ? 'Snadné' : r.difficulty === 'medium' ? 'Střední' : 'Náročné';
+    const isFav = userFavorites.includes(r.id);
+    const diets = r.recipe_diets?.map(rd => rd.diets).filter(Boolean) || [];
+    const isHealthy = diets.some(d => d.slug === 'vegetarian' || d.slug === 'vegan');
+    
     return `
     <div class="recipe-card" onclick="openDetail(${r.id})">
-      <div class="card-image" style="background-image: url('${r.image}')">
-        ${r.diets.includes('vegetarian')||r.diets.includes('vegan')?'<span class="badge">🌱 Zdravé</span>':''}
-        <span class="badge-time">⏱️ ${r.time} min</span>
+      <div class="card-image" style="background-image: url('${r.image_url || 'https://placehold.co/400x300/E8722A/FFF?text=Recept'}')">
+        ${currentUser ? `<button class="favorite-btn ${isFav ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite(${r.id})" style="color:${isFav ? 'white' : '#333'}">${isFav ? '❤️' : '🤍'}</button>` : ''}
+        ${isHealthy ? '<span class="badge">🌱 Zdravé</span>' : ''}
+        <span class="badge-time">⏱️ ${r.time_minutes} min</span>
       </div>
       <div class="card-body">
         <h3>${r.name}</h3>
-        <p>${r.desc}</p>
+        <p>${r.description || ''}</p>
         <div class="card-meta">
           <span class="stars">${stars}</span>
           <span class="difficulty ${r.difficulty}">${diffLabel}</span>
         </div>
       </div>
-    </div>`;
+    </div>
+    `;
   }).join('');
 }
 
+function updateUserUI() {
+  const menu = document.getElementById('userMenu');
+  const loginBtn = document.getElementById('loginBtn');
+  
+  if (currentUser) {
+    const email = currentUser.email;
+    const initial = email.charAt(0).toUpperCase();
+    menu.innerHTML = `
+      <button class="btn-add" onclick="openAddModal()">➕ Přidat recept</button>
+      <div class="user-avatar">${initial}</div>
+      <button class="btn-login" onclick="handleLogout()">Odhlásit</button>
+    `;
+  } else {
+    menu.innerHTML = `
+      <button class="btn-login" onclick="openAuthModal()">👤 Přihlásit</button>
+    `;
+  }
+}
+
+// ============================================
+// AUTENTIZACE
+// ============================================
+function openAuthModal() {
+  document.getElementById('authModal').classList.add('active');
+}
+
+function closeAuthModal() {
+  document.getElementById('authModal').classList.remove('active');
+}
+
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  
+  if (tab === 'login') {
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('registerForm').style.display = 'none';
+  } else {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'block';
+  }
+}
+
+async function handleLogin() {
+  const email = document.getElementById('authEmail').value;
+  const password = document.getElementById('authPassword').value;
+  
+  if (!email || !password) {
+    showToast('❌ Vyplňte email a heslo', true);
+    return;
+  }
+  
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+  
+  if (error) {
+    showToast('❌ ' + error.message, true);
+    return;
+  }
+  
+  currentUser = data.user;
+  updateUserUI();
+  closeAuthModal();
+  await loadFavorites();
+  loadRecipes();
+  showToast('✅ Úspěšně přihlášeno!');
+}
+
+async function handleRegister() {
+  const email = document.getElementById('regEmail').value;
+  const password = document.getElementById('regPassword').value;
+  
+  if (!email || !password) {
+    showToast('❌ Vyplňte email a heslo', true);
+    return;
+  }
+  
+  if (password.length < 6) {
+    showToast('❌ Heslo musí mít alespoň 6 znaků', true);
+    return;
+  }
+  
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password
+  });
+  
+  if (error) {
+    showToast('❌ ' + error.message, true);
+    return;
+  }
+  
+  showToast('✅ Registrace úspěšná! Zkontrolujte email.');
+  closeAuthModal();
+}
+
+async function handleLogout() {
+  await supabase.auth.signOut();
+  currentUser = null;
+  userFavorites = [];
+  updateUserUI();
+  loadRecipes();
+  showToast('👋 Odhlášeno');
+}
+
+// ============================================
+// OBLÍBENÉ
+// ============================================
+async function toggleFavorite(recipeId) {
+  if (!currentUser) {
+    showToast('❌ Pro přidání do oblíbených se přihlaste', true);
+    openAuthModal();
+    return;
+  }
+  
+  const isFav = userFavorites.includes(recipeId);
+  
+  if (isFav) {
+    // Odebrat z oblíbených
+    const { error } = await supabase
+      .from('favorites')
+      .delete()
+      .eq('user_id', currentUser.id)
+      .eq('recipe_id', recipeId);
+    
+    if (error) {
+      showToast('❌ Chyba: ' + error.message, true);
+      return;
+    }
+    
+    userFavorites = userFavorites.filter(id => id !== recipeId);
+    showToast('💔 Odebráno z oblíbených');
+  } else {
+    // Přidat do oblíbených
+    const { error } = await supabase
+      .from('favorites')
+      .insert({ user_id: currentUser.id, recipe_id: recipeId });
+    
+    if (error) {
+      showToast('❌ Chyba: ' + error.message, true);
+      return;
+    }
+    
+    userFavorites.push(recipeId);
+    showToast('❤️ Přidáno do oblíbených!');
+  }
+  
+  loadRecipes();
+}
+
+// ============================================
+// DETAIL RECEPTU
+// ============================================
+async function openDetail(id) {
+  const { data: r, error } = await supabase
+    .from('recipes')
+    .select(`
+      *,
+      categories(name, emoji),
+      recipe_diets(diets(slug, name, emoji)),
+      ingredients(*),
+      steps(*)
+    `)
+    .eq('id', id)
+    .single();
+  
+  if (error || !r) {
+    showToast('❌ Recept nenalezen', true);
+    return;
+  }
+  
+  const modal = document.getElementById('detailModal');
+  const hero = document.getElementById('modalHero');
+  const body = document.getElementById('modalBody');
+  
+  hero.style.backgroundImage = `url('${r.image_url || 'https://placehold.co/800x400/E8722A/FFF?text=Recept'}')`;
+  hero.innerHTML = `<button class="modal-close" onclick="closeModal()">✕</button>`;
+  
+  const diffLabel = r.difficulty === 'easy' ? 'Snadné' : r.difficulty === 'medium' ? 'Střední' : 'Náročné';
+  const diets = r.recipe_diets?.map(rd => rd.diets).filter(Boolean) || [];
+  const dietTags = diets.map(d => `<span class="info-badge">${d.emoji} ${d.name}</span>`).join('');
+  
+  const ingredients = r.ingredients?.sort((a, b) => a.order_index - b.order_index) || [];
+  const steps = r.steps?.sort((a, b) => a.order_index - b.order_index) || [];
+  
+  body.innerHTML = `
+    <h1>${r.name}</h1>
+    <p style="color:var(--text-light);font-size:1.05em;margin-top:4px">${r.description || ''}</p>
+    <div class="modal-info">
+      <span class="info-badge"><span class="icon">⏱️</span>${r.time_minutes} min</span>
+      <span class="info-badge"><span class="icon">👤</span>${r.servings} porce</span>
+      <span class="info-badge"><span class="icon">📊</span>${diffLabel}</span>
+      ${dietTags}
+    </div>
+    <div style="margin:16px 0">
+      <span style="font-weight:600;margin-right:8px">Hodnocení (${r.rating_count || 0}):</span>
+      <span class="modal-rating" id="ratingStars">
+        ${[1,2,3,4,5].map(i => `<span class="star ${i <= Math.round(r.rating || 0) ? 'active' : ''}" onclick="rateRecipe(${r.id}, ${i})">⭐</span>`).join('')}
+      </span>
+    </div>
+    <h3 class="section-title">🥘 Ingredience</h3>
+    <div class="ingredients-list">
+      ${ingredients.length > 0 
+        ? ingredients.map(ing => `<div class="ingredient-item"><span class="check">✓</span>${ing.amount ? ing.amount + ' ' : ''}${ing.name}</div>`).join('')
+        : '<p>Žádné ingredience</p>'
+      }
+    </div>
+    <h3 class="section-title">👨‍🍳 Postup přípravy</h3>
+    <div class="steps-list">
+      ${steps.length > 0
+        ? steps.map((s, i) => `
+          <div class="step-item">
+            <div class="step-number">${i + 1}</div>
+            <div class="step-content">
+              <p>${s.description}</p>
+              <span class="step-emoji">${s.emoji || '👨‍🍳'}</span>
+            </div>
+          </div>
+        `).join('')
+        : '<p>Žádné kroky</p>'
+      }
+    </div>
+  `;
+  
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('detailModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+async function rateRecipe(id, rating) {
+  if (!currentUser) {
+    showToast('❌ Pro hodnocení se přihlaste', true);
+    openAuthModal();
+    return;
+  }
+  
+  const { error } = await supabase
+    .from('ratings')
+    .upsert({
+      user_id: currentUser.id,
+      recipe_id: id,
+      rating: rating
+    }, { onConflict: ['user_id', 'recipe_id'] });
+  
+  if (error) {
+    showToast('❌ Chyba: ' + error.message, true);
+    return;
+  }
+  
+  // Aktualizace UI
+  const stars = document.querySelectorAll('#ratingStars .star');
+  stars.forEach((s, i) => s.classList.toggle('active', i < rating));
+  
+  showToast(`⭐ Hodnocení ${rating}/5 uloženo!`);
+  
+  // Přenačíst recepty pro aktualizaci průměru
+  setTimeout(() => loadRecipes(), 500);
+}
+
+// ============================================
+// PŘIDÁNÍ RECEPTU
+// ============================================
+function openAddModal() {
+  if (!currentUser) {
+    showToast('❌ Pro přidání receptu se přihlaste', true);
+    openAuthModal();
+    return;
+  }
+  document.getElementById('addModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAddModal() {
+  document.getElementById('addModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+async function addRecipe() {
+  const name = document.getElementById('newName').value.trim();
+  const categoryId = document.getElementById('newCat').value;
+  const description = document.getElementById('newDesc').value.trim();
+  const imageUrl = document.getElementById('newImage').value.trim();
+  const timeMinutes = parseInt(document.getElementById('newTime').value) || 30;
+  const servings = parseInt(document.getElementById('newServings').value) || 4;
+  const difficulty = document.getElementById('newDiff').value;
+  const ingredientsText = document.getElementById('newIngredients').value;
+  const stepsText = document.getElementById('newSteps').value;
+  
+  if (!name || !ingredientsText || !stepsText) {
+    showToast('❌ Vyplňte povinná pole (název, ingredience, postup)', true);
+    return;
+  }
+  
+  // Vytvoření slug z názvu
+  const slug = name.toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .substring(0, 200);
+  
+  // Vložení receptu
+  const { data: recipe, error: recipeError } = await supabase
+    .from('recipes')
+    .insert({
+      name,
+      slug,
+      description,
+      category_id: parseInt(categoryId),
+      image_url: imageUrl || null,
+      time_minutes: timeMinutes,
+      servings,
+      difficulty,
+      author_id: currentUser.id,
+      is_public: true
+    })
+    .select()
+    .single();
+  
+  if (recipeError) {
+    showToast('❌ Chyba při ukládání: ' + recipeError.message, true);
+    return;
+  }
+  
+  // Vložení ingrediencí
+  const ingredients = ingredientsText
+    .split('\n')
+    .filter(line => line.trim())
+    .map((line, index) => {
+      // Zkusit rozdělit na množství a název
+      const match = line.match(/^([\d\s\/.,]+\s*[a-zA-Z]*)\s+(.+)$/);
+      if (match) {
+        return {
+          recipe_id: recipe.id,
+          amount: match[1].trim(),
+          name: match[2].trim(),
+          order_index: index
+        };
+      }
+      return {
+        recipe_id: recipe.id,
+        name: line.trim(),
+        order_index: index
+      };
+    });
+  
+  const { error: ingError } = await supabase
+    .from('ingredients')
+    .insert(ingredients);
+  
+  if (ingError) {
+    console.error('Chyba při ukládání ingrediencí:', ingError);
+  }
+  
+  // Vložení kroků
+  const steps = stepsText
+    .split('\n')
+    .filter(line => line.trim())
+    .map((line, index) => ({
+      recipe_id: recipe.id,
+      description: line.trim(),
+      order_index: index
+    }));
+  
+  const { error: stepsError } = await supabase
+    .from('steps')
+    .insert(steps);
+  
+  if (stepsError) {
+    console.error('Chyba při ukládání kroků:', stepsError);
+  }
+  
+  // Reset formuláře
+  document.getElementById('newName').value = '';
+  document.getElementById('newDesc').value = '';
+  document.getElementById('newImage').value = '';
+  document.getElementById('newIngredients').value = '';
+  document.getElementById('newSteps').value = '';
+  
+  closeAddModal();
+  showToast('✅ Recept byl úspěšně přidán!');
+  loadRecipes();
+}
+
+// ============================================
+// FILTRY A VYHLEDÁVÁNÍ
+// ============================================
 function filterCategory(cat) {
   currentCategory = cat;
-  // Update nav links
+  
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(a => {
-    if(a.getAttribute('onclick')?.includes(`'${cat}'`)) a.classList.add('active');
+    if (a.getAttribute('onclick')?.includes(`'${cat}'`)) a.classList.add('active');
   });
-  // Update pills
+  
   document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.cat-pill').forEach(p => {
-    if(p.getAttribute('onclick')?.includes(`'${cat}'`)) p.classList.add('active');
+    if (p.getAttribute('onclick')?.includes(`'${cat}'`)) p.classList.add('active');
   });
-  applyFilters();
+  
+  loadRecipes();
 }
 
 function searchRecipes() {
   applyFilters();
 }
 
-function applyFilters() {
+async function applyFilters() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const maxTime = parseInt(document.getElementById('timeFilter').value);
   const diff = document.getElementById('difficultyFilter').value;
   const checks = [...document.querySelectorAll('.checkbox-group input:checked')].map(c => c.value);
-
-  let filtered = recipes.filter(r => {
-    if(currentCategory !== 'all' && r.cat !== currentCategory) return false;
-    if(q && !r.name.toLowerCase().includes(q) && !r.desc.toLowerCase().includes(q)) return false;
-    if(r.time > maxTime) return false;
-    if(diff !== 'all' && r.difficulty !== diff) return false;
-    if(checks.length > 0 && !checks.every(c => r.diets.includes(c))) return false;
-    return true;
-  });
+  
+  let query = supabase
+    .from('recipes')
+    .select(`
+      *,
+      categories(name, emoji),
+      recipe_diets(diets(slug, name, emoji))
+    `)
+    .eq('is_public', true);
+  
+  if (currentCategory !== 'all') {
+    const catId = categories.find(c => c.slug === currentCategory)?.id;
+    if (catId) query = query.eq('category_id', catId);
+  }
+  
+  if (diff !== 'all') {
+    query = query.eq('difficulty', diff);
+  }
+  
+  query = query.lte('time_minutes', maxTime);
+  
+  const { data, error } = await query.order('created_at', { ascending: false });
+  
+  if (error) {
+    console.error('Chyba při filtrování:', error);
+    return;
+  }
+  
+  let filtered = data || [];
+  
+  // Filtrování podle textu
+  if (q) {
+    filtered = filtered.filter(r => 
+      r.name.toLowerCase().includes(q) || 
+      (r.description && r.description.toLowerCase().includes(q))
+    );
+  }
+  
+  // Filtrování podle diety
+  if (checks.length > 0) {
+    filtered = filtered.filter(r => {
+      const recipeDiets = r.recipe_diets?.map(rd => rd.diets?.slug) || [];
+      return checks.every(c => recipeDiets.includes(c));
+    });
+  }
+  
   currentRecipes = filtered;
   renderRecipes(filtered);
 }
@@ -844,146 +1295,48 @@ function resetFilters() {
   document.getElementById('difficultyFilter').value = 'all';
   document.querySelectorAll('.checkbox-group input').forEach(c => c.checked = false);
   currentCategory = 'all';
-  document.querySelectorAll('.cat-pill').forEach((p,i) => p.classList.toggle('active', i===0));
-  document.querySelectorAll('.nav-links a').forEach((a,i) => a.classList.toggle('active', i===0));
-  applyFilters();
+  document.querySelectorAll('.cat-pill').forEach((p, i) => p.classList.toggle('active', i === 0));
+  document.querySelectorAll('.nav-links a').forEach((a, i) => a.classList.toggle('active', i === 0));
+  loadRecipes();
   showToast('✅ Filtry resetovány');
 }
 
-function openDetail(id) {
-  const r = recipes.find(x => x.id === id);
-  if(!r) return;
-  const modal = document.getElementById('detailModal');
-  const hero = document.getElementById('modalHero');
-  const body = document.getElementById('modalBody');
-
-  hero.style.backgroundImage = `url('${r.image}')`;
-  hero.innerHTML = `<button class="modal-close" onclick="closeModal()">✕</button>`;
-
-  const diffLabel = r.difficulty==='easy'?'Snadné':r.difficulty==='medium'?'Střední':'Náročné';
-  const dietTags = r.diets.map(d => {
-    const labels = {vegetarian:'🥕 Vegetariánské',vegan:'🌱 Veganské','gluten-free':'🌾 Bezlepkové','low-carb':'📉 Low carb'};
-    return `<span class="info-badge"><span class="icon"></span>${labels[d]||d}</span>`;
-  }).join('');
-
-  body.innerHTML = `
-    <h1>${r.name}</h1>
-    <p style="color:var(--text-light);font-size:1.05em;margin-top:4px">${r.desc}</p>
-    <div class="modal-info">
-      <span class="info-badge"><span class="icon">⏱️</span>${r.time} min</span>
-      <span class="info-badge"><span class="icon">👤</span>${r.servings} porce</span>
-      <span class="info-badge"><span class="icon">📊</span>${diffLabel}</span>
-      ${dietTags}
-    </div>
-    <div style="margin:16px 0">
-      <span style="font-weight:600;margin-right:8px">Vaše hodnocení:</span>
-      <span class="modal-rating" id="ratingStars">
-        ${[1,2,3,4,5].map(i=>`<span class="star ${i<=r.rating?'active':''}" onclick="rateRecipe(${r.id},${i})">⭐</span>`).join('')}
-      </span>
-    </div>
-    <h3 class="section-title">🥘 Ingredience</h3>
-    <div class="ingredients-list">
-      ${r.ingredients.map(ing => `<div class="ingredient-item"><span class="check">✓</span>${ing}</div>`).join('')}
-    </div>
-    <h3 class="section-title">👨‍🍳 Postup přípravy</h3>
-    <div class="steps-list">
-      ${r.steps.map((s,i) => `
-        <div class="step-item">
-          <div class="step-number">${i+1}</div>
-          <div class="step-content">
-            <p>${s.text}</p>
-            <span class="step-emoji">${s.emoji}</span>
-          </div>
-        </div>
-      `).join('')}
-    </div>
-    <h3 class="section-title">📸 Galerie</h3>
-    <div class="gallery">
-      ${r.gallery.map((g,i) => `<div class="gallery-item" style="background-image: url('${g}')"></div>`).join('')}
-    </div>
-  `;
-
-  modal.classList.add('active');
-  document.body.style.overflow = 'hidden';
+// ============================================
+// UTILS
+// ============================================
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function closeModal() {
-  document.getElementById('detailModal').classList.remove('active');
-  document.body.style.overflow = '';
+function toggleNav() {
+  document.getElementById('navLinks').classList.toggle('open');
 }
 
-function rateRecipe(id, rating) {
-  const r = recipes.find(x => x.id === id);
-  if(r) r.rating = rating;
-  const stars = document.querySelectorAll('#ratingStars .star');
-  stars.forEach((s,i) => s.classList.toggle('active', i < rating));
-  renderRecipes(currentRecipes);
-  showToast(`⭐ Hodnocení ${rating}/5 uloženo!`);
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('mobile-open');
 }
 
-function openAddModal() {
-  document.getElementById('addModal').classList.add('active');
-  document.body.style.overflow = 'hidden';
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isError ? ' error' : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-function closeAddModal() {
-  document.getElementById('addModal').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-function addRecipe() {
-  const name = document.getElementById('newName').value.trim();
-  if(!name) { showToast('⚠️ Vyplňte název receptu'); return; }
-  const cat = document.getElementById('newCat').value;
-  const desc = document.getElementById('newDesc').value.trim() || 'Skvělý domácí recept.';
-  const time = parseInt(document.getElementById('newTime').value) || 30;
-  const diff = document.getElementById('newDiff').value;
-  const ings = document.getElementById('newIngredients').value.split('\n').filter(x=>x.trim());
-  const steps = document.getElementById('newSteps').value.split('\n').filter(x=>x.trim());
-
-  const images = ['images/carbonara.jpg','images/greek-salad.jpg','images/pumpkin-soup.jpg','images/lava-cake.jpg','images/avocado-toast.jpg','images/steak.jpg','images/sushi-bowl.jpg','images/pancakes.jpg','images/pizza.jpg','images/curry.jpg','images/salmon.jpg','images/tacos.jpg'];
-  const randomImage = images[Math.floor(Math.random()*images.length)];
-
-  const newR = {
-    id: Date.now(),
-    name, cat, desc, time, difficulty: diff,
-    image: randomImage,
-    rating: 0, diets: [], servings: 4,
-    ingredients: ings.length ? ings : ['Ingredience nebyly zadány'],
-    steps: steps.length ? steps.map(s => ({text:s, emoji:'👨‍🍳'})) : [{text:'Postup nebyl zadán.', emoji:'📝'}],
-    gallery: [randomImage, images[Math.floor(Math.random()*images.length)], images[Math.floor(Math.random()*images.length)]]
-  };
-
-  recipes.unshift(newR);
-  closeAddModal();
-  applyFilters();
-  showToast('✅ Recept byl úspěšně přidán!');
-
-  // Reset form
-  document.getElementById('newName').value = '';
-  document.getElementById('newDesc').value = '';
-  document.getElementById('newIngredients').value = '';
-  document.getElementById('newSteps').value = '';
-}
-
-// Close modals on overlay click
+// Zavření modálů kliknutím mimo
 document.getElementById('detailModal').addEventListener('click', function(e) {
-  if(e.target === this) closeModal();
+  if (e.target === this) closeModal();
+});
+document.getElementById('authModal').addEventListener('click', function(e) {
+  if (e.target === this) closeAuthModal();
 });
 document.getElementById('addModal').addEventListener('click', function(e) {
-  if(e.target === this) closeAddModal();
+  if (e.target === this) closeAddModal();
 });
 
-// Close sidebar on outside click (mobile)
-document.addEventListener('click', function(e) {
-  const sb = document.getElementById('sidebar');
-  if(sb.classList.contains('mobile-open') && !sb.contains(e.target) && !e.target.classList.contains('filter-mobile-btn')) {
-    sb.classList.remove('mobile-open');
-  }
-});
-
-// Init
-renderRecipes(recipes);
+// Inicializace při načtení stránky
+init();
 </script>
 </body>
 </html>

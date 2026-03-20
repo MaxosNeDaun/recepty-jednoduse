@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: recepty-jednoduse
+    name: recepty-jednoduse-supabase
     runtime: node
     plan: free
     buildCommand: npm install
