@@ -362,6 +362,54 @@ input[type="range"]::-webkit-slider-thumb {
 .step-content { flex: 1; padding-top: 4px; }
 .step-content p { margin-bottom: 4px; font-size: 1rem; line-height: 1.6; color: var(--gray-800); }
 
+/* RATING STYLES */
+.modal-rating { 
+  display: flex; 
+  align-items: center; 
+  gap: 4px; 
+  margin: 24px 0; 
+  padding: 16px;
+  background: var(--gray-50);
+  border-radius: var(--radius-md);
+}
+.rating-label {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  margin-right: 12px;
+  color: var(--text);
+}
+.rating-stars {
+  display: flex;
+  gap: 4px;
+}
+.rating-stars .star {
+  font-size: 1.75rem; 
+  cursor: pointer; 
+  transition: all 0.2s;
+  color: var(--gray-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rating-stars .star.active { color: #f59e0b; }
+.rating-stars .star:hover { transform: scale(1.2); }
+.rating-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f59e0b;
+  margin-left: 12px;
+}
+.rating-average {
+  font-size: 0.8125rem;
+  color: var(--gray-600);
+  margin-top: 4px;
+}
+.user-rated {
+  color: #166534;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
 /* AUTH MODAL */
 .auth-tabs {
   display: flex; gap: 8px; margin-bottom: 24px;
@@ -485,6 +533,8 @@ footer { background: var(--black); color: var(--gray-400); padding: 60px 24px 40
   .info-badge { font-size: 0.8125rem; padding: 6px 12px; }
   .recipes-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
   .admin-stats { grid-template-columns: repeat(2, 1fr); }
+  .modal-rating { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .rating-stars .star { font-size: 1.5rem; }
 }
 @media (max-width: 480px) {
   .recipes-grid { grid-template-columns: 1fr; }
@@ -762,6 +812,7 @@ let currentCategory = 'all';
 let currentRecipes = [];
 let categories = [];
 let userFavorites = [];
+let userRating = null; // Aktuální hodnocení uživatele pro daný recept
 let isAdmin = false;
 let currentAdminTab = 'pending';
 
@@ -826,6 +877,7 @@ function renderRecipes(list) {
     const isFav = userFavorites.includes(r.id);
     const isPending = !r.is_public;
     const isHealthy = r.recipe_diets?.some(rd => rd.diets?.slug === 'vegetarian' || rd.diets?.slug === 'vegan');
+    const avgRating = Math.round(r.rating || 0);
     return `
     <div class="recipe-card" onclick="openDetail(${r.id})">
       <div class="card-image" style="background-image: url('${r.image_url || 'https://placehold.co/600x400/f5f5f5/cccccc?text=Recept'}'); background-size: cover; background-position: center;">
@@ -838,7 +890,7 @@ function renderRecipes(list) {
         <h3>${r.name}</h3>
         <p>${r.description || 'Bez popisu'}</p>
         <div class="card-meta">
-          <span class="stars">${'★'.repeat(Math.round(r.rating || 0))}${'☆'.repeat(5 - Math.round(r.rating || 0))}</span>
+          <span class="stars">${'★'.repeat(avgRating)}${'☆'.repeat(5 - avgRating)}</span>
           <span class="difficulty ${r.difficulty}">${r.difficulty === 'easy' ? 'Snadné' : r.difficulty === 'medium' ? 'Střední' : 'Náročné'}</span>
         </div>
       </div>
@@ -906,7 +958,7 @@ async function handleRegister() {
 
 async function handleLogout() {
   await supabase.auth.signOut();
-  currentUser = null; userFavorites = []; isAdmin = false;
+  currentUser = null; userFavorites = []; userRating = null; isAdmin = false;
   updateUserUI(); loadRecipes(); showToast('Odhlášeno');
 }
 
@@ -925,31 +977,71 @@ async function toggleFavorite(recipeId) {
   loadRecipes();
 }
 
+// ============================================
+// HODNOCENÍ RECEPTY (NOVÁ FUNKCE)
+// ============================================
 async function openDetail(id) {
   const { data: r, error } = await supabase
     .from('recipes')
     .select(`*, categories(name), recipe_diets(diets(slug, name)), ingredients(*), steps(*)`)
     .eq('id', id).single();
   if (error) { showToast('Recept nenalezen', true); return; }
+
   const modal = document.getElementById('detailModal');
   const hero = document.getElementById('modalHero');
   const body = document.getElementById('modalBody');
+  
   hero.style.backgroundImage = `url('${r.image_url || 'https://placehold.co/800x400/f5f5f5/cccccc?text=Recept'}')`;
   hero.style.backgroundSize = 'cover';
   hero.style.backgroundPosition = 'center';
   hero.innerHTML = `<button class="modal-close" onclick="closeModal()">✕</button>`;
+  
   const diets = r.recipe_diets?.map(rd => rd.diets?.name).filter(Boolean) || [];
   const ingredients = r.ingredients?.sort((a, b) => a.order_index - b.order_index) || [];
   const steps = r.steps?.sort((a, b) => a.order_index - b.order_index) || [];
+  
+  // Načíst vlastní hodnocení uživatele
+  let myRating = 0;
+  if (currentUser) {
+    const { data: ratingData } = await supabase
+      .from('ratings')
+      .select('rating')
+      .eq('user_id', currentUser.id)
+      .eq('recipe_id', id)
+      .single();
+    myRating = ratingData?.rating || 0;
+  }
+
+  userRating = myRating;
+
   body.innerHTML = `
     <h1>${r.name}</h1>
     <p style="color:var(--gray-600);font-size:1.125rem;margin-top:8px">${r.description || ''}</p>
+    
     <div class="modal-info">
       <span class="info-badge">⏱️ ${r.time_minutes} min</span>
       <span class="info-badge">👤 ${r.servings} porce</span>
       <span class="info-badge">📊 ${r.difficulty === 'easy' ? 'Snadné' : r.difficulty === 'medium' ? 'Střední' : 'Náročné'}</span>
       ${diets.map(d => `<span class="info-badge">🥗 ${d}</span>`).join('')}
     </div>
+
+    ${currentUser ? `
+      <div class="modal-rating">
+        <span class="rating-label">Vaše hodnocení:</span>
+        <div class="rating-stars" id="ratingStars">
+          ${[1, 2, 3, 4, 5].map(i => `
+            <span class="star ${i <= myRating ? 'active' : ''}" onclick="rateRecipe(${r.id}, ${i})">⭐</span>
+          `).join('')}
+        </div>
+        <span class="rating-value">${myRating > 0 ? `${myRating}/5` : 'Ohodnoťte'}</span>
+      </div>
+      ${myRating > 0 ? '<div class="rating-average">✅ Děkujeme za vaše hodnocení!</div>' : '<div class="rating-average">Klikněte na hvězdičku pro ocenění</div>'}
+    ` : '<div class="modal-rating"><p style="color:var(--gray-600)">🔒 Přihlaste se pro hodnocení receptů</p></div>'}
+
+    <div style="margin: 16px 0 0 0; padding: 16px; background: var(--gray-50); border-radius: var(--radius-md);">
+      <strong>Průměrné hodnocení:</strong> ${Math.round(r.rating || 0)}/5 (${r.rating_count || 0} hodnocení)
+    </div>
+
     ${isAdmin ? `
       <div style="display:flex;gap:10px;margin:24px 0;flex-wrap:wrap">
         ${!r.is_public
@@ -958,6 +1050,7 @@ async function openDetail(id) {
         }
         <button class="btn btn-danger btn-sm" onclick="adminDeleteRecipe(${r.id},'${r.name.replace(/'/g, "\\'")}');closeModal()">Smazat</button>
       </div>` : ''}
+
     <h3 class="section-title">Ingredience</h3>
     <div class="ingredients-list">
       ${ingredients.map(ing => `
@@ -966,6 +1059,7 @@ async function openDetail(id) {
           ${ing.amount ? `<strong>${ing.amount}</strong> ` : ''}${ing.name}
         </div>`).join('') || '<p style="color:var(--gray-400)">Žádné ingredience</p>'}
     </div>
+    
     <h3 class="section-title">Postup</h3>
     <div class="steps-list">
       ${steps.map((s, i) => `
@@ -974,8 +1068,61 @@ async function openDetail(id) {
           <div class="step-content"><p>${s.description}</p></div>
         </div>`).join('') || '<p style="color:var(--gray-400)">Žádný postup</p>'}
     </div>`;
+
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
+}
+
+async function rateRecipe(recipeId, rating) {
+  if (!currentUser) { showToast('Pro hodnocení se přihlaste', true); openAuthModal(); return; }
+  
+  try {
+    const { error } = await supabase
+      .from('ratings')
+      .upsert(
+        { user_id: currentUser.id, recipe_id: recipeId, rating: rating },
+        { onConflict: ['user_id', 'recipe_id'] }
+      );
+    
+    if (error) throw error;
+    
+    userRating = rating;
+    showToast('⭐ Hodnocení uloženo!');
+    
+    // Aktualizovat hvězdičky v modálu
+    updateRatingStars(rating);
+    
+    // Refresh receptu
+    await loadRecipes();
+  } catch (err) {
+    console.error('Chyba při hodnocení:', err);
+    showToast('Chyba při ukládání hodnocení', true);
+  }
+}
+
+function updateRatingStars(rating) {
+  const stars = document.querySelectorAll('#ratingStars .star');
+  stars.forEach((star, index) => {
+    const starNumber = index + 1;
+    if (starNumber <= rating) {
+      star.classList.add('active');
+    } else {
+      star.classList.remove('active');
+    }
+  });
+  
+  // Aktualizovat text hodnoty
+  const ratingValue = document.querySelector('.rating-value');
+  if (ratingValue) {
+    ratingValue.textContent = `${rating}/5`;
+  }
+  
+  // Aktualizovat děkovací zprávu
+  const thankYouMsg = document.querySelector('.rating-average');
+  if (thankYouMsg && rating > 0) {
+    thankYouMsg.textContent = '✅ Děkujeme za vaše hodnocení!';
+    thankYouMsg.classList.add('user-rated');
+  }
 }
 
 function closeModal() {
@@ -1149,6 +1296,7 @@ async function adminDeleteRecipe(id, name) {
   await supabase.from('favorites').delete().eq('recipe_id', id);
   await supabase.from('ingredients').delete().eq('recipe_id', id);
   await supabase.from('steps').delete().eq('recipe_id', id);
+  await supabase.from('ratings').delete().eq('recipe_id', id);
   await supabase.from('recipes').delete().eq('id', id);
   showToast('Recept smazán');
   await loadAdminStats(); await loadAdminContent(currentAdminTab); loadRecipes();
