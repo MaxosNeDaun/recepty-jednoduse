@@ -14,7 +14,9 @@
   --gray-50: #fafafa;
   --gray-100: #f5f5f5;
   --gray-200: #e5e5e5;
+  --gray-300: #d4d4d4;
   --gray-400: #a3a3a3;
+  --gray-500: #737373;
   --gray-600: #737373;
   --gray-800: #262626;
   --gray-900: #171717;
@@ -36,6 +38,59 @@
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* DARK MODE */
+body.dark {
+  --black: #f5f5f5;
+  --white: #0a0a0a;
+  --gray-50: #111111;
+  --gray-100: #1a1a1a;
+  --gray-200: #2a2a2a;
+  --gray-300: #3a3a3a;
+  --gray-400: #666666;
+  --gray-500: #888888;
+  --gray-600: #aaaaaa;
+  --gray-800: #e0e0e0;
+  --gray-900: #f0f0f0;
+  --bg: #0a0a0a;
+  --bg-secondary: #111111;
+  --text: #f5f5f5;
+  --text-secondary: #aaaaaa;
+  --border: #2a2a2a;
+  --accent: #f5f5f5;
+  --accent-hover: #e0e0e0;
+}
+
+body.dark nav { background: #0a0a0a; }
+body.dark .hero { background: #111111; }
+body.dark .categories { background: #0a0a0a; }
+body.dark .sidebar { background: #111111; }
+body.dark .recipe-card { background: #111111; }
+body.dark .card-image { background: #1a1a1a; }
+body.dark .modal { background: #111111; }
+body.dark .modal-hero { background: #1a1a1a; }
+body.dark .modal-close { background: rgba(20,20,20,0.95); color: #f5f5f5; border-color: #2a2a2a; }
+body.dark .auth-tabs { background: #1a1a1a; }
+body.dark .auth-tab.active { background: #2a2a2a; color: #f5f5f5; }
+body.dark .form-group input,
+body.dark .form-group textarea,
+body.dark .form-group select { background: #1a1a1a; color: #f5f5f5; border-color: #2a2a2a; }
+body.dark .filter-group select { background: #1a1a1a; color: #f5f5f5; }
+body.dark .admin-search { background: #1a1a1a; color: #f5f5f5; }
+body.dark .search-box { background: #111111; border-color: #2a2a2a; }
+body.dark .search-box input { color: #f5f5f5; background: transparent; }
+body.dark .stat-card { background: #1a1a1a; }
+body.dark .admin-table th { background: #1a1a1a; }
+body.dark .admin-table tr:hover td { background: #1a1a1a; }
+body.dark .ingredient-item { background: #1a1a1a; }
+body.dark .info-badge { background: #1a1a1a; }
+body.dark .modal-rating { background: #1a1a1a; }
+body.dark .btn-secondary { background: #1a1a1a; color: #f5f5f5; border-color: #2a2a2a; }
+body.dark .btn-secondary:hover { background: #2a2a2a; }
+body.dark .nav-links { background: #0a0a0a; }
+body.dark .user-avatar { background: #1a1a1a; color: #f5f5f5; border-color: #2a2a2a; }
+body.dark footer { background: #050505; }
+body.dark .admin-card-actions { background: #1a1a1a; }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
@@ -45,6 +100,7 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background 0.3s, color 0.3s;
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -55,15 +111,16 @@ body {
 /* NAV */
 nav {
   position: sticky; top: 0; z-index: 100;
-  background: var(--white);
+  background: var(--bg);
   border-bottom: 1px solid var(--border);
   padding: 0 24px; height: 64px;
   display: flex; align-items: center; justify-content: space-between;
+  transition: background 0.3s;
 }
 .nav-logo {
   font-size: 1.25rem; font-weight: 700;
   letter-spacing: -0.025em; cursor: pointer;
-  color: var(--black); display: flex; align-items: center; gap: 8px;
+  color: var(--text); display: flex; align-items: center; gap: 8px;
 }
 .nav-logo span { color: var(--gray-600); font-weight: 500; font-size: 0.95rem; }
 .nav-links {
@@ -78,9 +135,19 @@ nav {
   transition: var(--transition); height: 32px;
   display: flex; align-items: center; gap: 6px;
 }
-.nav-links a:hover { color: var(--black); background: var(--white); box-shadow: var(--shadow-sm); }
-.nav-links a.active { background: var(--black); color: var(--white); box-shadow: var(--shadow-sm); }
+.nav-links a:hover { color: var(--text); background: var(--bg); box-shadow: var(--shadow-sm); }
+.nav-links a.active { background: var(--accent); color: var(--bg); box-shadow: var(--shadow-sm); }
 .user-menu { display: flex; align-items: center; gap: 12px; }
+
+/* DARK MODE TOGGLE */
+.dark-toggle {
+  background: var(--gray-100); border: 1px solid var(--border);
+  width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+  font-size: 1rem; display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.dark-toggle:hover { background: var(--gray-200); transform: scale(1.05); }
+
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
   gap: 6px; padding: 8px 16px; border-radius: var(--radius-md);
@@ -88,9 +155,9 @@ nav {
   transition: var(--transition); border: 1px solid transparent;
   text-decoration: none; line-height: 1;
 }
-.btn-primary { background: var(--black); color: var(--white); }
+.btn-primary { background: var(--accent); color: var(--bg); }
 .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
-.btn-secondary { background: var(--white); color: var(--black); border: 1px solid var(--border); }
+.btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
 .btn-secondary:hover { background: var(--gray-50); border-color: var(--gray-400); }
 .btn-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
 .btn-danger:hover { background: #fecaca; }
@@ -98,45 +165,46 @@ nav {
 .btn-lg { padding: 10px 20px; font-size: 0.9375rem; height: 40px; }
 .user-avatar {
   width: 32px; height: 32px; border-radius: 50%;
-  background: var(--gray-100); color: var(--black);
+  background: var(--gray-100); color: var(--text);
   display: flex; align-items: center; justify-content: center;
   font-weight: 600; font-size: 0.875rem;
   border: 1px solid var(--border); cursor: pointer;
 }
-.user-avatar.admin-avatar { background: var(--gray-900); color: white; border-color: var(--gray-900); }
-.nav-hamburger { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--black); padding: 4px; }
+.user-avatar.admin-avatar { background: var(--gray-900); color: var(--bg); border-color: var(--gray-900); }
+.nav-hamburger { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text); padding: 4px; }
 
 /* HERO */
 .hero {
   position: relative; min-height: 60vh;
   display: flex; align-items: center; justify-content: center;
   text-align: center; padding: 80px 24px;
-  background: var(--gray-50); border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary); border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
 }
 .hero-content { max-width: 700px; z-index: 2; }
 .hero h1 {
   font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 800;
   letter-spacing: -0.03em; margin-bottom: 1rem;
-  line-height: 1.1; color: var(--black);
+  line-height: 1.1; color: var(--text);
 }
 .hero p {
-  color: var(--gray-600); font-size: 1.125rem; margin-bottom: 2.5rem;
+  color: var(--text-secondary); font-size: 1.125rem; margin-bottom: 2.5rem;
   max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6;
 }
 .search-box {
   display: flex; max-width: 540px; margin: 0 auto;
-  background: var(--white); border: 1px solid var(--border);
+  background: var(--bg); border: 1px solid var(--border);
   border-radius: 9999px; overflow: hidden;
   box-shadow: var(--shadow-lg); transition: var(--transition);
 }
-.search-box:focus-within { border-color: var(--black); box-shadow: 0 0 0 3px rgba(0,0,0,0.1); }
+.search-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,0,0,0.1); }
 .search-box input {
   flex: 1; border: none; padding: 16px 24px; font-size: 1rem;
-  outline: none; background: transparent; color: var(--black); font-family: inherit;
+  outline: none; background: transparent; color: var(--text); font-family: inherit;
 }
 .search-box input::placeholder { color: var(--gray-400); }
 .search-box button {
-  background: var(--black); color: var(--white); border: none;
+  background: var(--accent); color: var(--bg); border: none;
   padding: 16px 24px; cursor: pointer; font-size: 1.125rem; transition: var(--transition);
 }
 .search-box button:hover { background: var(--accent-hover); transform: scale(1.02); }
@@ -145,16 +213,17 @@ nav {
 .categories {
   display: flex; justify-content: center; gap: 8px;
   padding: 24px; flex-wrap: wrap;
-  background: var(--white); border-bottom: 1px solid var(--border);
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
 }
 .cat-pill {
-  background: var(--gray-50); border: 1px solid var(--border);
+  background: var(--bg-secondary); border: 1px solid var(--border);
   padding: 8px 20px; border-radius: 9999px; cursor: pointer;
   font-weight: 500; font-size: 0.875rem; transition: var(--transition);
-  display: flex; align-items: center; gap: 8px; color: var(--gray-600);
+  display: flex; align-items: center; gap: 8px; color: var(--text-secondary);
 }
-.cat-pill:hover { background: var(--white); border-color: var(--black); color: var(--black); box-shadow: var(--shadow-sm); }
-.cat-pill.active { background: var(--black); color: var(--white); border-color: var(--black); box-shadow: var(--shadow-sm); }
+.cat-pill:hover { background: var(--bg); border-color: var(--accent); color: var(--text); box-shadow: var(--shadow-sm); }
+.cat-pill.active { background: var(--accent); color: var(--bg); border-color: var(--accent); box-shadow: var(--shadow-sm); }
 
 /* MAIN LAYOUT */
 .main-container {
@@ -165,13 +234,14 @@ nav {
 /* SIDEBAR */
 .sidebar {
   width: 280px; flex-shrink: 0;
-  background: var(--white); border: 1px solid var(--border);
+  background: var(--bg); border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: 24px;
   height: fit-content; position: sticky; top: 90px; align-self: flex-start;
+  transition: background 0.3s;
 }
 .sidebar h3 {
   font-size: 0.875rem; text-transform: uppercase;
-  letter-spacing: 0.05em; color: var(--gray-600);
+  letter-spacing: 0.05em; color: var(--text-secondary);
   margin-bottom: 20px; font-weight: 600;
 }
 .filter-group { margin-bottom: 24px; }
@@ -183,9 +253,9 @@ nav {
   width: 100%; padding: 10px 14px;
   border: 1px solid var(--border); border-radius: var(--radius-md);
   font-size: 0.9375rem; outline: none; transition: var(--transition);
-  background: var(--white); color: var(--black); font-family: inherit;
+  background: var(--bg); color: var(--text); font-family: inherit;
 }
-.filter-group select:focus { border-color: var(--black); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+.filter-group select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
 .range-labels {
   display: flex; justify-content: space-between;
   font-size: 0.75rem; color: var(--gray-400); margin-top: 6px;
@@ -196,11 +266,11 @@ input[type="range"] {
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; width: 16px; height: 16px;
-  border-radius: 50%; background: var(--black); cursor: pointer;
-  border: 2px solid var(--white); box-shadow: var(--shadow-sm);
+  border-radius: 50%; background: var(--accent); cursor: pointer;
+  border: 2px solid var(--bg); box-shadow: var(--shadow-sm);
 }
 .btn-filter {
-  width: 100%; background: var(--black); color: white; border: none;
+  width: 100%; background: var(--accent); color: var(--bg); border: none;
   padding: 12px; border-radius: var(--radius-md);
   font-weight: 600; cursor: pointer; font-size: 0.9375rem; transition: var(--transition);
 }
@@ -213,13 +283,13 @@ input[type="range"]::-webkit-slider-thumb {
   margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
   padding-bottom: 16px; border-bottom: 1px solid var(--border);
 }
-.recipes-header h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; }
-.recipes-count { color: var(--gray-600); font-size: 0.875rem; font-weight: 500; }
+.recipes-header h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; color: var(--text); }
+.recipes-count { color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; }
 .filter-mobile-btn {
-  display: none; background: var(--white);
+  display: none; background: var(--bg);
   border: 1px solid var(--border); padding: 8px 16px;
   border-radius: var(--radius-md); cursor: pointer;
-  font-weight: 500; font-size: 0.875rem;
+  font-weight: 500; font-size: 0.875rem; color: var(--text);
 }
 .recipes-grid {
   display: grid;
@@ -229,7 +299,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* RECIPE CARD */
 .recipe-card {
-  background: var(--white); border: 1px solid var(--border);
+  background: var(--bg); border: 1px solid var(--border);
   border-radius: var(--radius-lg); overflow: hidden;
   cursor: pointer; transition: var(--transition);
   display: flex; flex-direction: column; height: 100%;
@@ -242,7 +312,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .badge {
   position: absolute; top: 12px; left: 12px;
-  background: var(--white); color: var(--black);
+  background: var(--bg); color: var(--text);
   padding: 4px 12px; border-radius: 9999px;
   font-size: 0.75rem; font-weight: 600; border: 1px solid var(--border);
 }
@@ -266,11 +336,11 @@ input[type="range"]::-webkit-slider-thumb {
   font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
   transition: var(--transition); color: var(--gray-400);
 }
-.favorite-btn:hover { transform: scale(1.1); background: var(--white); color: var(--black); }
-.favorite-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+.favorite-btn:hover { transform: scale(1.1); background: var(--bg); color: var(--text); }
+.favorite-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
 .card-body { padding: 20px; display: flex; flex-direction: column; flex: 1; }
-.card-body h3 { font-size: 1.125rem; margin-bottom: 8px; font-weight: 700; line-height: 1.4; color: var(--black); }
-.card-body p { color: var(--gray-600); font-size: 0.9375rem; margin-bottom: 16px; line-height: 1.5; flex: 1; }
+.card-body h3 { font-size: 1.125rem; margin-bottom: 8px; font-weight: 700; line-height: 1.4; color: var(--text); }
+.card-body p { color: var(--text-secondary); font-size: 0.9375rem; margin-bottom: 16px; line-height: 1.5; flex: 1; }
 .card-meta {
   display: flex; justify-content: space-between; align-items: center;
   padding-top: 16px; border-top: 1px solid var(--border);
@@ -287,7 +357,7 @@ input[type="range"]::-webkit-slider-thumb {
 /* ADMIN CARD ACTIONS */
 .admin-card-actions {
   display: flex; gap: 8px; padding: 16px 20px;
-  border-top: 1px solid var(--border); background: var(--gray-50);
+  border-top: 1px solid var(--border); background: var(--bg-secondary);
 }
 .btn-approve, .btn-reject, .btn-delete-admin {
   flex: 1; padding: 8px; border-radius: var(--radius-md);
@@ -304,16 +374,17 @@ input[type="range"]::-webkit-slider-thumb {
 /* MODALS */
 .modal-overlay {
   display: none; position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
   overflow-y: auto; padding: 24px;
 }
 .modal-overlay.active { display: flex; justify-content: center; align-items: flex-start; }
 .modal {
-  background: var(--white); border-radius: var(--radius-xl);
+  background: var(--bg); border-radius: var(--radius-xl);
   max-width: 800px; width: 100%; margin: 40px auto;
   overflow: hidden; box-shadow: var(--shadow-lg);
   animation: modalIn 0.3s ease; position: relative;
   max-height: calc(100vh - 80px); overflow-y: auto;
+  border: 1px solid var(--border);
 }
 @keyframes modalIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 .modal-hero {
@@ -327,88 +398,57 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: var(--transition); color: var(--black); z-index: 10;
 }
-.modal-close:hover { background: var(--white); transform: rotate(90deg); box-shadow: var(--shadow-md); }
+.modal-close:hover { background: var(--bg); transform: rotate(90deg); box-shadow: var(--shadow-md); }
 .modal-body { padding: 32px; }
-.modal-body h1 { font-size: 2rem; margin-bottom: 8px; font-weight: 800; letter-spacing: -0.02em; }
+.modal-body h1 { font-size: 2rem; margin-bottom: 8px; font-weight: 800; letter-spacing: -0.02em; color: var(--text); }
 .modal-info { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
 .info-badge {
   display: flex; align-items: center; gap: 8px;
-  background: var(--gray-50); border: 1px solid var(--border);
+  background: var(--bg-secondary); border: 1px solid var(--border);
   padding: 8px 16px; border-radius: 9999px;
-  font-weight: 600; font-size: 0.875rem; color: var(--gray-800);
+  font-weight: 600; font-size: 0.875rem; color: var(--text);
 }
 .section-title {
-  font-size: 1.125rem; margin: 32px 0 16px; color: var(--black);
+  font-size: 1.125rem; margin: 32px 0 16px; color: var(--text);
   font-weight: 700; display: flex; align-items: center; gap: 8px;
   padding-bottom: 12px; border-bottom: 1px solid var(--border);
 }
 .ingredients-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .ingredient-item {
   display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px; background: var(--gray-50);
+  padding: 10px 14px; background: var(--bg-secondary);
   border: 1px solid var(--border); border-radius: var(--radius-md);
-  font-size: 0.9375rem; transition: var(--transition);
+  font-size: 0.9375rem; transition: var(--transition); color: var(--text);
 }
-.ingredient-item:hover { background: var(--white); border-color: var(--black); transform: translateX(4px); }
-.ingredient-item .check { color: var(--black); font-weight: 700; font-size: 1rem; }
+.ingredient-item:hover { background: var(--bg); border-color: var(--accent); transform: translateX(4px); }
+.ingredient-item .check { color: var(--accent); font-weight: 700; font-size: 1rem; }
 .steps-list { counter-reset: step; }
 .step-item { display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
 .step-number {
   width: 32px; height: 32px; flex-shrink: 0;
-  background: var(--black); color: white; border-radius: 50%;
+  background: var(--accent); color: var(--bg); border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 0.875rem;
 }
 .step-content { flex: 1; padding-top: 4px; }
-.step-content p { margin-bottom: 4px; font-size: 1rem; line-height: 1.6; color: var(--gray-800); }
+.step-content p { margin-bottom: 4px; font-size: 1rem; line-height: 1.6; color: var(--text-secondary); }
 
 /* RATING STYLES */
-.modal-rating { 
-  display: flex; 
-  align-items: center; 
-  gap: 4px; 
-  margin: 24px 0; 
-  padding: 16px;
-  background: var(--gray-50);
-  border-radius: var(--radius-md);
+.modal-rating {
+  display: flex; align-items: center; gap: 4px; margin: 24px 0; padding: 16px;
+  background: var(--bg-secondary); border-radius: var(--radius-md);
 }
-.rating-label {
-  font-weight: 600;
-  font-size: 0.9375rem;
-  margin-right: 12px;
-  color: var(--text);
-}
-.rating-stars {
-  display: flex;
-  gap: 4px;
-}
+.rating-label { font-weight: 600; font-size: 0.9375rem; margin-right: 12px; color: var(--text); }
+.rating-stars { display: flex; gap: 4px; }
 .rating-stars .star {
-  font-size: 1.75rem; 
-  cursor: pointer; 
-  transition: all 0.2s;
-  color: var(--gray-300);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 1.75rem; cursor: pointer; transition: all 0.2s;
+  color: var(--gray-300); display: flex; align-items: center; justify-content: center;
 }
 .rating-stars .star.active { color: #f59e0b; }
 .rating-stars .star:hover { transform: scale(1.2); }
-.rating-value {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #f59e0b;
-  margin-left: 12px;
-}
-.rating-average {
-  font-size: 0.8125rem;
-  color: var(--gray-600);
-  margin-top: 4px;
-}
-.user-rated {
-  color: #166534;
-  font-size: 0.8125rem;
-  font-weight: 500;
-}
+.rating-value { font-size: 1.25rem; font-weight: 700; color: #f59e0b; margin-left: 12px; }
+.rating-average { font-size: 0.8125rem; color: var(--text-secondary); margin-top: 4px; }
+.user-rated { color: #166534; font-size: 0.8125rem; font-weight: 500; }
 
 /* AUTH MODAL */
 .auth-tabs {
@@ -418,9 +458,9 @@ input[type="range"]::-webkit-slider-thumb {
 .auth-tab {
   flex: 1; padding: 10px; border: none; background: transparent;
   border-radius: var(--radius-sm); cursor: pointer;
-  font-weight: 600; font-size: 0.9375rem; transition: var(--transition); color: var(--gray-600);
+  font-weight: 600; font-size: 0.9375rem; transition: var(--transition); color: var(--text-secondary);
 }
-.auth-tab.active { background: var(--white); color: var(--black); box-shadow: var(--shadow-sm); }
+.auth-tab.active { background: var(--bg); color: var(--text); box-shadow: var(--shadow-sm); }
 
 /* FORMS */
 .form-group { margin-bottom: 20px; }
@@ -430,11 +470,11 @@ input[type="range"]::-webkit-slider-thumb {
 .form-group select {
   width: 100%; padding: 12px 16px; border: 1px solid var(--border);
   border-radius: var(--radius-md); font-size: 0.9375rem; outline: none;
-  font-family: inherit; background: var(--white); transition: var(--transition); color: var(--black);
+  font-family: inherit; background: var(--bg); transition: var(--transition); color: var(--text);
 }
 .form-group input:focus,
 .form-group textarea:focus,
-.form-group select:focus { border-color: var(--black); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+.form-group select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
 .form-group textarea { min-height: 120px; resize: vertical; line-height: 1.5; }
 
 /* ADMIN PANEL */
@@ -443,10 +483,10 @@ input[type="range"]::-webkit-slider-thumb {
   gap: 16px; margin-bottom: 32px;
 }
 .stat-card {
-  background: var(--gray-50); border: 1px solid var(--border);
+  background: var(--bg-secondary); border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: 20px; text-align: center;
 }
-.stat-card .stat-number { font-size: 2rem; font-weight: 800; color: var(--black); letter-spacing: -0.02em; }
+.stat-card .stat-number { font-size: 2rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
 .stat-card .stat-label { font-size: 0.8125rem; color: var(--gray-500); margin-top: 4px; font-weight: 500; }
 .stat-card.red .stat-number { color: #dc2626; }
 .stat-card.green .stat-number { color: #16a34a; }
@@ -460,15 +500,15 @@ input[type="range"]::-webkit-slider-thumb {
   font-weight: 600; font-size: 0.9375rem; transition: var(--transition);
   color: var(--gray-500); margin-bottom: -1px; padding-bottom: 11px;
 }
-.admin-tab.active { color: var(--black); border-bottom-color: var(--black); }
+.admin-tab.active { color: var(--text); border-bottom-color: var(--accent); }
 .admin-table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
 .admin-table th {
-  background: var(--gray-50); padding: 12px 16px; text-align: left;
-  font-weight: 600; color: var(--gray-600); font-size: 0.8125rem;
+  background: var(--bg-secondary); padding: 12px 16px; text-align: left;
+  font-weight: 600; color: var(--text-secondary); font-size: 0.8125rem;
   text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border);
 }
-.admin-table td { padding: 16px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--gray-800); }
-.admin-table tr:hover td { background: var(--gray-50); }
+.admin-table td { padding: 16px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--text); }
+.admin-table tr:hover td { background: var(--bg-secondary); }
 .admin-table tr:last-child td { border-bottom: none; }
 .status-badge { padding: 4px 12px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-block; border: 1px solid transparent; }
 .status-badge.public { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
@@ -485,9 +525,9 @@ input[type="range"]::-webkit-slider-thumb {
 .admin-search {
   width: 100%; padding: 12px 16px; border: 1px solid var(--border);
   border-radius: var(--radius-md); font-size: 0.9375rem; outline: none;
-  margin-bottom: 20px; background: var(--white); font-family: inherit;
+  margin-bottom: 20px; background: var(--bg); font-family: inherit; color: var(--text);
 }
-.admin-search:focus { border-color: var(--black); }
+.admin-search:focus { border-color: var(--accent); }
 .role-badge { padding: 3px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; display: inline-block; border: 1px solid transparent; }
 .role-badge.admin { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
 .role-badge.user { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
@@ -495,7 +535,7 @@ input[type="range"]::-webkit-slider-thumb {
 .empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
 
 /* FOOTER */
-footer { background: var(--black); color: var(--gray-400); padding: 60px 24px 40px; margin-top: 80px; }
+footer { background: #050505; color: var(--gray-400); padding: 60px 24px 40px; margin-top: 80px; }
 .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
 .footer-col h4 { color: var(--white); margin-bottom: 20px; font-size: 1rem; font-weight: 700; letter-spacing: -0.025em; }
 .footer-col p, .footer-col a { font-size: 0.9375rem; line-height: 1.8; color: var(--gray-400); text-decoration: none; transition: color 0.2s; }
@@ -506,12 +546,12 @@ footer { background: var(--black); color: var(--gray-400); padding: 60px 24px 40
 .toast {
   position: fixed; bottom: 30px; left: 50%;
   transform: translateX(-50%) translateY(100px);
-  background: var(--black); color: white; padding: 14px 28px;
+  background: var(--accent); color: var(--bg); padding: 14px 28px;
   border-radius: var(--radius-md); font-weight: 500; z-index: 300;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-lg); border: 1px solid var(--gray-800); font-size: 0.9375rem;
+  box-shadow: var(--shadow-lg); border: 1px solid var(--border); font-size: 0.9375rem;
 }
-.toast.error { background: #dc2626; border-color: #b91c1c; }
+.toast.error { background: #dc2626; border-color: #b91c1c; color: white; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
 /* RESPONSIVE */
@@ -521,7 +561,7 @@ footer { background: var(--black); color: var(--gray-400); padding: 60px 24px 40
   .filter-mobile-btn { display: inline-flex; }
 }
 @media (max-width: 768px) {
-  .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--white); border-bottom: 1px solid var(--border); padding: 12px 24px; flex-direction: column; gap: 4px; box-shadow: var(--shadow-lg); }
+  .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 24px; flex-direction: column; gap: 4px; box-shadow: var(--shadow-lg); }
   .nav-links.open { display: flex; }
   .nav-hamburger { display: block; }
   .hero { min-height: 50vh; }
@@ -561,6 +601,7 @@ footer { background: var(--black); color: var(--gray-400); padding: 60px 24px 40
     <a href="#" onclick="filterCategory('zdrave')">Zdravé</a>
   </div>
   <div class="user-menu" id="userMenu">
+    <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Přepnout tmavý režim">🌙</button>
     <button class="btn btn-primary btn-sm" onclick="openAddModal()">➕ Přidat</button>
     <button class="btn btn-secondary btn-sm" id="loginBtn" onclick="openAuthModal()">Přihlásit</button>
   </div>
@@ -640,7 +681,7 @@ footer { background: var(--black); color: var(--gray-400); padding: 60px 24px 40
     <div class="modal-body" style="padding: 40px 32px;">
       <button class="modal-close" onclick="closeAuthModal()" style="position:absolute;top:16px;right:16px">✕</button>
       <h1 style="font-size: 1.75rem; margin-bottom: 8px;">Přihlášení</h1>
-      <p style="color: var(--gray-500); margin-bottom: 32px;">Přihlaste se pro ukládání receptů a hodnocení.</p>
+      <p style="color: var(--text-secondary); margin-bottom: 32px;">Přihlaste se pro ukládání receptů a hodnocení.</p>
       <div class="auth-tabs">
         <button class="auth-tab active" onclick="switchAuthTab('login')" id="tab-login">Přihlásit se</button>
         <button class="auth-tab" onclick="switchAuthTab('register')" id="tab-register">Registrovat</button>
@@ -738,8 +779,8 @@ footer { background: var(--black); color: var(--gray-400); padding: 60px 24px 40
     <div class="admin-modal-body" style="padding: 0; position: relative;">
       <div style="padding: 32px 32px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <h1 style="color: var(--black); margin: 0 0 4px 0; font-size: 1.5rem;">Admin Panel</h1>
-          <p style="color: var(--gray-500); margin: 0; font-size: 0.875rem;">Správa receptů a uživatelů</p>
+          <h1 style="color: var(--text); margin: 0 0 4px 0; font-size: 1.5rem;">Admin Panel</h1>
+          <p style="color: var(--text-secondary); margin: 0; font-size: 0.875rem;">Správa receptů a uživatelů</p>
         </div>
         <button class="modal-close" onclick="closeAdminModal()">✕</button>
       </div>
@@ -802,6 +843,8 @@ footer { background: var(--black); color: var(--gray-400); padding: 60px 24px 40
   </div>
 </footer>
 
+<div class="toast" id="toast"></div>
+
 <script>
 const SUPABASE_URL = 'https://bvyjornhpipyhaptqkbc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2eWpvcm5ocGlweWhhcHRxa2JjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMDE0NzcsImV4cCI6MjA4OTU3NzQ3N30.IRckFTu3SoQHflZiPUv2EhKW_aJP9msgurW2PEzl1FM';
@@ -812,11 +855,29 @@ let currentCategory = 'all';
 let currentRecipes = [];
 let categories = [];
 let userFavorites = [];
-let userRating = null; // Aktuální hodnocení uživatele pro daný recept
+let userRating = null;
 let isAdmin = false;
 let currentAdminTab = 'pending';
 
+// DARK MODE
+function toggleDark() {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('darkMode', isDark ? '1' : '0');
+  document.getElementById('darkToggle').textContent = isDark ? '☀️' : '🌙';
+}
+
+function initDarkMode() {
+  const saved = localStorage.getItem('darkMode');
+  // Výchozí: tmavý režim zapnutý
+  const isDark = saved === null ? true : saved === '1';
+  if (isDark) {
+    document.body.classList.add('dark');
+    document.getElementById('darkToggle').textContent = '☀️';
+  }
+}
+
 async function init() {
+  initDarkMode();
   const { data: { user } } = await supabase.auth.getUser();
   currentUser = user;
   if (currentUser) await checkAdminRole();
@@ -908,16 +969,22 @@ function renderRecipes(list) {
 
 function updateUserUI() {
   const menu = document.getElementById('userMenu');
+  const isDark = document.body.classList.contains('dark');
+  const toggleBtn = `<button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Přepnout tmavý režim">${isDark ? '☀️' : '🌙'}</button>`;
   if (currentUser) {
     const initial = currentUser.email.charAt(0).toUpperCase();
     menu.innerHTML = `
+      ${toggleBtn}
       <button class="btn btn-primary btn-sm" onclick="openAddModal()">➕ Přidat</button>
       ${isAdmin ? `<button class="btn btn-secondary btn-sm" onclick="openAdminModal()" style="background:#fee2e2;color:#991b1b;border-color:#fecaca">🛡️ Admin</button>` : ''}
       <div class="user-avatar ${isAdmin ? 'admin-avatar' : ''}" title="${currentUser.email}">${initial}</div>
       <button class="btn btn-secondary btn-sm" onclick="handleLogout()">Odhlásit</button>
     `;
   } else {
-    menu.innerHTML = `<button class="btn btn-primary btn-sm" onclick="openAuthModal()">Přihlásit</button>`;
+    menu.innerHTML = `
+      ${toggleBtn}
+      <button class="btn btn-primary btn-sm" onclick="openAuthModal()">Přihlásit</button>
+    `;
   }
 }
 
@@ -977,9 +1044,6 @@ async function toggleFavorite(recipeId) {
   loadRecipes();
 }
 
-// ============================================
-// HODNOCENÍ RECEPTY (NOVÁ FUNKCE)
-// ============================================
 async function openDetail(id) {
   const { data: r, error } = await supabase
     .from('recipes')
@@ -990,58 +1054,47 @@ async function openDetail(id) {
   const modal = document.getElementById('detailModal');
   const hero = document.getElementById('modalHero');
   const body = document.getElementById('modalBody');
-  
+
   hero.style.backgroundImage = `url('${r.image_url || 'https://placehold.co/800x400/f5f5f5/cccccc?text=Recept'}')`;
   hero.style.backgroundSize = 'cover';
   hero.style.backgroundPosition = 'center';
   hero.innerHTML = `<button class="modal-close" onclick="closeModal()">✕</button>`;
-  
+
   const diets = r.recipe_diets?.map(rd => rd.diets?.name).filter(Boolean) || [];
   const ingredients = r.ingredients?.sort((a, b) => a.order_index - b.order_index) || [];
   const steps = r.steps?.sort((a, b) => a.order_index - b.order_index) || [];
-  
-  // Načíst vlastní hodnocení uživatele
+
   let myRating = 0;
   if (currentUser) {
     const { data: ratingData } = await supabase
-      .from('ratings')
-      .select('rating')
-      .eq('user_id', currentUser.id)
-      .eq('recipe_id', id)
-      .single();
+      .from('ratings').select('rating')
+      .eq('user_id', currentUser.id).eq('recipe_id', id).single();
     myRating = ratingData?.rating || 0;
   }
-
   userRating = myRating;
 
   body.innerHTML = `
     <h1>${r.name}</h1>
-    <p style="color:var(--gray-600);font-size:1.125rem;margin-top:8px">${r.description || ''}</p>
-    
+    <p style="color:var(--text-secondary);font-size:1.125rem;margin-top:8px">${r.description || ''}</p>
     <div class="modal-info">
       <span class="info-badge">⏱️ ${r.time_minutes} min</span>
       <span class="info-badge">👤 ${r.servings} porce</span>
       <span class="info-badge">📊 ${r.difficulty === 'easy' ? 'Snadné' : r.difficulty === 'medium' ? 'Střední' : 'Náročné'}</span>
       ${diets.map(d => `<span class="info-badge">🥗 ${d}</span>`).join('')}
     </div>
-
     ${currentUser ? `
       <div class="modal-rating">
         <span class="rating-label">Vaše hodnocení:</span>
         <div class="rating-stars" id="ratingStars">
-          ${[1, 2, 3, 4, 5].map(i => `
-            <span class="star ${i <= myRating ? 'active' : ''}" onclick="rateRecipe(${r.id}, ${i})">⭐</span>
-          `).join('')}
+          ${[1, 2, 3, 4, 5].map(i => `<span class="star ${i <= myRating ? 'active' : ''}" onclick="rateRecipe(${r.id}, ${i})">⭐</span>`).join('')}
         </div>
         <span class="rating-value">${myRating > 0 ? `${myRating}/5` : 'Ohodnoťte'}</span>
       </div>
       ${myRating > 0 ? '<div class="rating-average">✅ Děkujeme za vaše hodnocení!</div>' : '<div class="rating-average">Klikněte na hvězdičku pro ocenění</div>'}
-    ` : '<div class="modal-rating"><p style="color:var(--gray-600)">🔒 Přihlaste se pro hodnocení receptů</p></div>'}
-
-    <div style="margin: 16px 0 0 0; padding: 16px; background: var(--gray-50); border-radius: var(--radius-md);">
+    ` : '<div class="modal-rating"><p style="color:var(--text-secondary)">🔒 Přihlaste se pro hodnocení receptů</p></div>'}
+    <div style="margin: 16px 0 0 0; padding: 16px; background: var(--bg-secondary); border-radius: var(--radius-md); border: 1px solid var(--border);">
       <strong>Průměrné hodnocení:</strong> ${Math.round(r.rating || 0)}/5 (${r.rating_count || 0} hodnocení)
     </div>
-
     ${isAdmin ? `
       <div style="display:flex;gap:10px;margin:24px 0;flex-wrap:wrap">
         ${!r.is_public
@@ -1050,7 +1103,6 @@ async function openDetail(id) {
         }
         <button class="btn btn-danger btn-sm" onclick="adminDeleteRecipe(${r.id},'${r.name.replace(/'/g, "\\'")}');closeModal()">Smazat</button>
       </div>` : ''}
-
     <h3 class="section-title">Ingredience</h3>
     <div class="ingredients-list">
       ${ingredients.map(ing => `
@@ -1059,7 +1111,6 @@ async function openDetail(id) {
           ${ing.amount ? `<strong>${ing.amount}</strong> ` : ''}${ing.name}
         </div>`).join('') || '<p style="color:var(--gray-400)">Žádné ingredience</p>'}
     </div>
-    
     <h3 class="section-title">Postup</h3>
     <div class="steps-list">
       ${steps.map((s, i) => `
@@ -1075,24 +1126,15 @@ async function openDetail(id) {
 
 async function rateRecipe(recipeId, rating) {
   if (!currentUser) { showToast('Pro hodnocení se přihlaste', true); openAuthModal(); return; }
-  
   try {
-    const { error } = await supabase
-      .from('ratings')
-      .upsert(
-        { user_id: currentUser.id, recipe_id: recipeId, rating: rating },
-        { onConflict: ['user_id', 'recipe_id'] }
-      );
-    
+    const { error } = await supabase.from('ratings').upsert(
+      { user_id: currentUser.id, recipe_id: recipeId, rating: rating },
+      { onConflict: ['user_id', 'recipe_id'] }
+    );
     if (error) throw error;
-    
     userRating = rating;
     showToast('⭐ Hodnocení uloženo!');
-    
-    // Aktualizovat hvězdičky v modálu
     updateRatingStars(rating);
-    
-    // Refresh receptu
     await loadRecipes();
   } catch (err) {
     console.error('Chyba při hodnocení:', err);
@@ -1101,23 +1143,11 @@ async function rateRecipe(recipeId, rating) {
 }
 
 function updateRatingStars(rating) {
-  const stars = document.querySelectorAll('#ratingStars .star');
-  stars.forEach((star, index) => {
-    const starNumber = index + 1;
-    if (starNumber <= rating) {
-      star.classList.add('active');
-    } else {
-      star.classList.remove('active');
-    }
+  document.querySelectorAll('#ratingStars .star').forEach((star, index) => {
+    star.classList.toggle('active', index + 1 <= rating);
   });
-  
-  // Aktualizovat text hodnoty
   const ratingValue = document.querySelector('.rating-value');
-  if (ratingValue) {
-    ratingValue.textContent = `${rating}/5`;
-  }
-  
-  // Aktualizovat děkovací zprávu
+  if (ratingValue) ratingValue.textContent = `${rating}/5`;
   const thankYouMsg = document.querySelector('.rating-average');
   if (thankYouMsg && rating > 0) {
     thankYouMsg.textContent = '✅ Děkujeme za vaše hodnocení!';
@@ -1125,20 +1155,12 @@ function updateRatingStars(rating) {
   }
 }
 
-function closeModal() {
-  document.getElementById('detailModal').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
+function closeModal() { document.getElementById('detailModal').classList.remove('active'); document.body.style.overflow = ''; }
 function openAddModal() {
   if (!currentUser) { showToast('Pro přidání se přihlaste', true); openAuthModal(); return; }
-  document.getElementById('addModal').classList.add('active');
-  document.body.style.overflow = 'hidden';
+  document.getElementById('addModal').classList.add('active'); document.body.style.overflow = 'hidden';
 }
-function closeAddModal() {
-  document.getElementById('addModal').classList.remove('active');
-  document.body.style.overflow = '';
-}
+function closeAddModal() { document.getElementById('addModal').classList.remove('active'); document.body.style.overflow = ''; }
 
 async function addRecipe() {
   const name = document.getElementById('newName').value.trim();
@@ -1163,9 +1185,7 @@ async function addRecipe() {
     return { recipe_id: recipe.id, amount: m ? m[1].trim() : null, name: m ? m[2].trim() : l.trim(), order_index: i };
   });
   await supabase.from('ingredients').insert(ingredients);
-  const steps = stepsTxt.split('\n').filter(l => l.trim()).map((l, i) => ({
-    recipe_id: recipe.id, description: l.trim(), order_index: i
-  }));
+  const steps = stepsTxt.split('\n').filter(l => l.trim()).map((l, i) => ({ recipe_id: recipe.id, description: l.trim(), order_index: i }));
   await supabase.from('steps').insert(steps);
   ['newName', 'newDesc', 'newImage', 'newIngredients', 'newSteps'].forEach(id => document.getElementById(id).value = '');
   closeAddModal();
@@ -1175,16 +1195,12 @@ async function addRecipe() {
 
 async function openAdminModal() {
   if (!isAdmin) { showToast('Přístup zamítnut', true); return; }
-  document.getElementById('adminModal').classList.add('active');
-  document.body.style.overflow = 'hidden';
+  document.getElementById('adminModal').classList.add('active'); document.body.style.overflow = 'hidden';
   currentAdminTab = 'pending';
   await loadAdminStats();
   await loadAdminContent('pending');
 }
-function closeAdminModal() {
-  document.getElementById('adminModal').classList.remove('active');
-  document.body.style.overflow = '';
-}
+function closeAdminModal() { document.getElementById('adminModal').classList.remove('active'); document.body.style.overflow = ''; }
 
 async function switchAdminTab(tab) {
   currentAdminTab = tab;
@@ -1216,10 +1232,7 @@ async function loadAdminContent(tab) {
 
 async function renderAdminPending(container) {
   const { data } = await supabase.from('recipes').select('*, categories(name)').eq('is_public', false).order('created_at', { ascending: false });
-  if (!data?.length) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">✓</div><h3>Vše schváleno</h3><p>Žádné recepty nečekají.</p></div>`;
-    return;
-  }
+  if (!data?.length) { container.innerHTML = `<div class="empty-state"><div class="empty-icon">✓</div><h3>Vše schváleno</h3><p>Žádné recepty nečekají.</p></div>`; return; }
   container.innerHTML = `<div class="table-wrap"><table class="admin-table"><thead><tr><th>Recept</th><th>Kategorie</th><th>Čas</th><th>Akce</th></tr></thead><tbody>${
     data.map(r => `<tr>
       <td><strong>${r.name}</strong></td>
@@ -1320,7 +1333,6 @@ async function applyFilters() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const maxT = parseInt(document.getElementById('timeFilter').value);
   const diff = document.getElementById('difficultyFilter').value;
-
   let query = supabase.from('recipes').select(`*, categories(name), recipe_diets(diets(slug))`);
   if (!isAdmin) query = query.eq('is_public', true);
   if (currentCategory !== 'all') {
@@ -1329,7 +1341,6 @@ async function applyFilters() {
   }
   if (diff !== 'all') query = query.eq('difficulty', diff);
   query = query.lte('time_minutes', maxT);
-
   const { data } = await query.order('created_at', { ascending: false });
   let f = data || [];
   if (q) f = f.filter(r => r.name.toLowerCase().includes(q));
